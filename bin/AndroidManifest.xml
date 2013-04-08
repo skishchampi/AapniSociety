@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.apdisociety"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.apdisociety.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.apdisociety.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:parentActivityName="com.apdisociety.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.apdisociety.SignupActivity"
+            android:label="@string/title_activity_signup"
+            android:parentActivityName="com.apdisociety.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.apdisociety.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.apdisociety.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.LoginActivity" />
+        </activity>
+        <activity
+            android:name="com.apdisociety.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:parentActivityName="com.apdisociety.LoginActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.LoginActivity" />
+        </activity>
+        <activity
+            android:name="com.apdisociety.RequestServiceActivity"
+            android:label="@string/title_activity_request_service"
+            android:parentActivityName="com.apdisociety.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.HomeActivity" />
+        </activity>
+    </application>
+
+</manifest>
