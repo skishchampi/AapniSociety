@@ -29,7 +29,7 @@
         android:inputType="textEmailAddress"
         android:text="@string/email" >
 
-        <requestFocus />
+        
     </EditText>
 
     <EditText
@@ -54,16 +54,6 @@
         android:inputType="textPassword"
         android:text="@string/password" />
 
-    <DatePicker
-        android:id="@+id/datePicker1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/radioButton2"
-        android:layout_alignLeft="@+id/editText4"
-        android:layout_alignRight="@+id/editText3"
-        android:layout_below="@+id/editText4"
-        android:layout_marginTop="30dp" />
-
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
@@ -73,31 +63,44 @@
         android:layout_marginRight="25dp"
         android:text="@string/signup" />
 
-    <RadioButton
-        android:id="@+id/radioButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/radioButton1"
-        android:layout_alignRight="@+id/editText4"
-        android:text="@string/male" />
-
-    <RadioButton
-        android:id="@+id/radioButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/datePicker1"
-        android:text="@string/female" />
-
     <EditText
         android:id="@+id/editText5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/editText2"
-        android:layout_alignLeft="@+id/radioButton2"
+        android:layout_alignBaseline="@+id/editText1"
+        android:layout_alignBottom="@+id/editText1"
+        android:layout_alignLeft="@+id/button1"
         android:layout_alignParentRight="true"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/last_name" />
+
+    <RadioGroup
+        android:id="@+id/radioSex"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editText4" >
+ 
+        <RadioButton
+            android:id="@+id/radioMale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/male" 
+            android:checked="true" />
+ 
+        <RadioButton
+            android:id="@+id/radioFemale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/female" />
+ 
+    </RadioGroup>
+
+    <Button 
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content"
+    android:text="@string/pick_date" 
+    android:onClick="showDatePickerDialog" />
+
 
 </RelativeLayout>

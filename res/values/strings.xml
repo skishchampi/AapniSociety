@@ -22,6 +22,13 @@
     <string name="title_activity_request_service">RequestServiceActivity</string>
     <string name="right_now">Right Now</string>
     <string name="long_term">Long Term</string>
+    <string name="search">Search</string>
+    <string name="add_location">Add this place</string>
+    <string name="editText1">Name</string>
+    <string name="add">Add a place</string>
+    <string name="search_place">Search for a place</string>
+    <string name="pick_date">Birthdate</string>
+
     <string-array name="services">
         <item>Maid</item>
         <item>Cook</item>
@@ -29,6 +36,9 @@
         <item>Carpenter</item>
         <item>Doctor</item>
     </string-array>
-    
+
+    <string name="title_activity_search_nbh">SearchNbhActivity</string>
+    <string name="title_activity_nbh">NbhActivity</string>
+    <string name="title_activity_nbh_select">NbhSelectActivity</string>
 
 </resources>

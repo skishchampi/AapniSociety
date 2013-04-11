@@ -1,21 +1,19 @@
 package com.apdisociety;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
+import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.support.v4.app.NavUtils;
+import android.annotation.TargetApi;
+import android.os.Build;
 
-public class HomeActivity extends Activity {
+public class SearchNbhActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.activity_search_nbh);
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
@@ -33,7 +31,7 @@ public class HomeActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.home, menu);
+		getMenuInflater().inflate(R.menu.search_nbh, menu);
 		return true;
 	}
 
@@ -53,18 +51,5 @@ public class HomeActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	public void requestService(View view) {
-	
-		Intent intent = new Intent (this, RequestServiceActivity.class);
-		startActivity(intent);
-	}
-	
-	public void neighbourhood(View view) {
-		
-		Intent intent = new Intent (this, NbhSelectActivity.class);
-		startActivity(intent);
-	}
 
-	
 }
