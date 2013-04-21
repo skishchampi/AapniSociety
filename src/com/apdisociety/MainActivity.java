@@ -20,13 +20,15 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	public void signUp(View view) {
-		Intent intent = new Intent(this, LoginActivity.class);
-		startActivity(intent);
-	}
-	public void signIn(View view) {
+	public void register(View view) {
+		
 		Intent intent = new Intent(this, SignupActivity.class);
 		startActivity(intent);
 	}
+	public void signIn(View view) {
+		Intent intent = new Intent(this, SignInActivity.class);
+		startActivity(intent);
+	}
+	
 
 }

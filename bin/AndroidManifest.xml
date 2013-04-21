@@ -119,6 +119,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apdisociety.HomeActivity" />
         </activity>
+
+        <service
+            android:name="com.apdisociety.ExecuteRequest"
+            android:label="ExecuteRequest" />
+
+        <activity
+            android:name="com.apdisociety.SignInActivity"
+            android:label="@string/title_activity_sign_in"
+            android:parentActivityName="com.apdisociety.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

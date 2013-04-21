@@ -4,17 +4,26 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
-public class NbhActivity extends Activity {
+public class SignInActivity extends Activity {
+	
+	RestService restServicePost;
+	private static final String TAG = "SignInActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_nbh);
+		setContentView(R.layout.activity_sign_in);
 		// Show the Up button in the action bar.
+		restServicePost = new RestService(mHandlerP, this, "http://jigar-btp.cloudapp.net/login/", RestService.POST); //Create new rest service for post
 		setupActionBar();
 	}
 
@@ -31,7 +40,7 @@ public class NbhActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.nbh, menu);
+		getMenuInflater().inflate(R.menu.sign_in, menu);
 		return true;
 	}
 
@@ -51,5 +60,34 @@ public class NbhActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+    
+	public void signIn(View view) {
+		EditText uname =  (EditText)findViewById(R.id.editText1);
+		EditText pwd =  (EditText)findViewById(R.id.editText2);
 
+		restServicePost.addParam("username", uname.getText().toString());
+	    restServicePost.addParam("password",pwd.getText().toString()); 
+	    
+	    try {
+	    	   
+			restServicePost.execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private final Handler mHandlerP = new Handler(){
+    	@Override
+    	public void handleMessage(Message msg){
+    			//t_query1.setText((String) msg.obj);
+    		Log.i(TAG,((String)msg.obj));
+    	}
+    		
+	};
+	
 }
+
+
+	
+	

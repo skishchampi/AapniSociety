@@ -12,7 +12,7 @@
     <string name="email">Email</string>
     <string name="reenter_email">Reenter Email</string>
     <string name="password">Password</string>
-    <string name="female">Female</string>
+    <string name="female">female</string>
     <string name="male">Male</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="request_service">Request a Service</string>
@@ -40,5 +40,6 @@
     <string name="title_activity_search_nbh">SearchNbhActivity</string>
     <string name="title_activity_nbh">NbhActivity</string>
     <string name="title_activity_nbh_select">NbhSelectActivity</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
 
 </resources>

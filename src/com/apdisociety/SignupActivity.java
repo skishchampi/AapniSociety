@@ -2,28 +2,32 @@ package com.apdisociety;
 
 import java.util.Calendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
-import android.app.*;
-import android.support.v4.app.*;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.DialogFragment;
+import android.widget.EditText;
+import android.widget.RadioButton;
 
 public class SignupActivity extends FragmentActivity {
 
+	RestService restServicePost;
+	private static final String TAG = "MyActivity";
+	
 	public static class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
 
@@ -45,6 +49,7 @@ public class SignupActivity extends FragmentActivity {
 	
 	
 }
+	private static final String LOG_TAG = null;
 	public void showDatePickerDialog(View v) {
 	    DialogFragment newFragment = new DatePickerFragment();
 	    newFragment.show(getSupportFragmentManager(), "datePicker");
@@ -54,8 +59,10 @@ public class SignupActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_signup);
+		restServicePost = new RestService(mHandlerP, this, "http://jigar-btp.cloudapp.net/register/", RestService.POST); //Create new rest service for post
 		// Show the Up button in the action bar.
 		setupActionBar();
+		System.out.print("askn");
 	}
 
 	/**
@@ -91,6 +98,71 @@ public class SignupActivity extends FragmentActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 	
+	public static String mf;
+	
+	/*Button signUp = (Button) findViewById(R.id.button1);
+	signUp.setOnClickListener(new View.OnClickListener(){
+		public void onClick(View view){
+			try {
+				restServicePost.execute(); //Executes the request with the HTTP Posting
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}); */
+	
+	public void signUp(View view) {
+	  EditText fname = (EditText)findViewById(R.id.editText1);
+	  EditText lname = (EditText)findViewById(R.id.editText5);
+	  EditText mail1 = (EditText)findViewById(R.id.editText2);
+	  EditText mail2 = (EditText)findViewById(R.id.editText3);
+	  EditText pwd = (EditText)findViewById(R.id.editText4);
+	  
+	  String email = mail1.getText().toString();
+	  
+	  System.out.print(fname.getText().toString());
+	  Log.i(TAG, fname.getText().toString());
+	  System.out.print(pwd.getText().toString());
+	  System.out.print(email);
+	  
+	  
+      restServicePost.addParam("username", fname.getText().toString()); //Add params to request
+      restServicePost.addParam("password",pwd.getText().toString()); //Format for a typical form encoded nested attribute
+      restServicePost.addParam("email",email);
+      
+      
+      try {
+    	   
+			restServicePost.execute(); //HTTP POSTing to the server
+		} catch (Exception e) {
+			e.printStackTrace();
+		}    
+	}
+    
+	private final Handler mHandlerP = new Handler(){
+    	@Override
+    	public void handleMessage(Message msg){
+    			//t_query1.setText((String) msg.obj);
+    		Log.i(TAG,((String)msg.obj));
+    		
+    		
+    		}		
+    };
+public void onRadioButtonClicked(View view) {
+	    // Is the button now checked?
+	    boolean checked = ((RadioButton)view).isChecked();
+	    
+	    // Check which radio button was clicked
+	    switch(view.getId()) {
+	        case R.id.radioMale:
+	            if (checked)
+	                mf = "male" ;
+	            break;
+	        case R.id.radioFemale:
+	            if (checked)
+	                mf = "female";
+	            break;
+	    }
+	}
 }
