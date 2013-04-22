@@ -9,14 +9,34 @@
     tools:context=".HomeActivity" >
 
     <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignRight="@+id/button3"
+        android:layout_below="@+id/button3"
+        android:layout_marginTop="28dp"
+        android:text="@string/neighbourhood" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button4"
+        android:layout_alignRight="@+id/button4"
+        android:layout_below="@+id/button4"
+        android:layout_marginTop="18dp"
+        android:text="Sign Out" />
+
+    <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="53dp"
-        android:text="@string/request_service"
-        android:onClick="requestService" />
+        android:layout_marginTop="35dp"
+        android:onClick="requestService"
+        android:text="@string/request_service" />
 
     <Button
         android:id="@+id/button2"
@@ -25,7 +45,7 @@
         android:layout_alignLeft="@+id/button1"
         android:layout_alignRight="@+id/button1"
         android:layout_below="@+id/button1"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="21dp"
         android:text="@string/notifications" />
 
     <Button
@@ -35,17 +55,7 @@
         android:layout_alignLeft="@+id/button2"
         android:layout_alignRight="@+id/button1"
         android:layout_below="@+id/button2"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="18dp"
         android:text="@string/gossip" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignRight="@+id/button3"
-        android:layout_below="@+id/button3"
-        android:layout_marginTop="28dp"
-        android:text="@string/neighbourhood" />
 
 </RelativeLayout>

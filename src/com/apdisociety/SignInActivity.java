@@ -2,6 +2,7 @@ package com.apdisociety;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +18,8 @@ public class SignInActivity extends Activity {
 	
 	RestService restServicePost;
 	private static final String TAG = "SignInActivity";
-
+	public Intent intent;
+	public static String[] response;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,14 +69,17 @@ public class SignInActivity extends Activity {
 
 		restServicePost.addParam("username", uname.getText().toString());
 	    restServicePost.addParam("password",pwd.getText().toString()); 
-	    
 	    try {
-	    	   
+		    intent = new Intent(this, HomeActivity.class);
+
 			restServicePost.execute();
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+	    
 	}
 	
 	private final Handler mHandlerP = new Handler(){
@@ -82,6 +87,14 @@ public class SignInActivity extends Activity {
     	public void handleMessage(Message msg){
     			//t_query1.setText((String) msg.obj);
     		Log.i(TAG,((String)msg.obj));
+    		response = ((String)msg.obj).split("\"");
+    		Log.i(TAG,response[3]);
+    		if(response[3].equals("1")){
+    		    Log.i(TAG, "WHy");	
+				startActivity(intent);
+			}
+    		
+    		
     	}
     		
 	};

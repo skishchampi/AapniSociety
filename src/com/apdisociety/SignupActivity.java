@@ -27,6 +27,7 @@ public class SignupActivity extends FragmentActivity {
 
 	RestService restServicePost;
 	private static final String TAG = "MyActivity";
+	public static String[] response;
 	
 	public static class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
@@ -145,6 +146,8 @@ public class SignupActivity extends FragmentActivity {
     	public void handleMessage(Message msg){
     			//t_query1.setText((String) msg.obj);
     		Log.i(TAG,((String)msg.obj));
+    		response = ((String)msg.obj).split("\"");
+    		Log.i(TAG,response[3]);
     		
     		
     		}		

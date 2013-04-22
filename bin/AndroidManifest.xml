@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apdisociety"
     android:versionCode="1"
@@ -120,9 +121,7 @@
                 android:value="com.apdisociety.HomeActivity" />
         </activity>
 
-        <service
-            android:name="com.apdisociety.ExecuteRequest"
-            android:label="ExecuteRequest" />
+        
 
         <activity
             android:name="com.apdisociety.SignInActivity"
@@ -131,7 +130,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apdisociety.MainActivity" />
+            
         </activity>
+        
+        <service
+            android:name="com.apdisociety.ExecuteRequest"
+            android:label="ExecuteRequest" />
     </application>
 
 </manifest>
+
+
+
