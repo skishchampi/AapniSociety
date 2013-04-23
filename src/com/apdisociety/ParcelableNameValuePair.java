@@ -8,10 +8,15 @@ import android.os.Parcelable;
 public class ParcelableNameValuePair implements NameValuePair, Parcelable{
 
 	String name, value;
-	
+	int value1;
 	public ParcelableNameValuePair(String name, String value){
 		this.name = name;
 		this.value = value;	
+	}
+	
+	public ParcelableNameValuePair(String name, int value){
+		this.name = name;
+		this.value1 = value;
 	}
 	
 	@Override
@@ -25,7 +30,11 @@ public class ParcelableNameValuePair implements NameValuePair, Parcelable{
 		// TODO Auto-generated method stub
 		return value;
 	}
-
+    
+	public int getValueint() {
+		return value1;
+	}
+	
 	public int describeContents() {
 		return 0;
 	}

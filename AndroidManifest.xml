@@ -1,5 +1,4 @@
-
-
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.apdisociety"
     android:versionCode="1"
@@ -120,9 +119,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apdisociety.HomeActivity" />
         </activity>
-
-        
-
         <activity
             android:name="com.apdisociety.SignInActivity"
             android:label="@string/title_activity_sign_in"
@@ -130,15 +126,20 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apdisociety.MainActivity" />
-            
         </activity>
-        
+
         <service
             android:name="com.apdisociety.ExecuteRequest"
             android:label="ExecuteRequest" />
+
+        <activity
+            android:name="com.apdisociety.GossipActivity"
+            android:label="@string/title_activity_gossip"
+            android:parentActivityName="com.apdisociety.HomeActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apdisociety.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>
-
-
-

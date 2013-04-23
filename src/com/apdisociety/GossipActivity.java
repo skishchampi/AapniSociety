@@ -2,34 +2,34 @@ package com.apdisociety;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.TextView;
 
-public class SignInActivity extends Activity {
-	
-	RestService restServicePost;
-	private static final String TAG = "SignInActivity";
-	public Intent intent;
-	public static String[] response;
+public class GossipActivity extends Activity {
+    
+	TextView tv  = (TextView) findViewById(R.id.messageHistory);
+	RestService restServicePostR, restServicePostS;
+	EditText send;
+
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_sign_in);
+		setContentView(R.layout.activity_gossip);
 		// Show the Up button in the action bar.
-		restServicePost = new RestService(mHandlerP, this, "http://jigar-btp.cloudapp.net/login/", RestService.POST); //Create new rest service for post
 		setupActionBar();
+		getGossip();
 	}
+	
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -44,7 +44,7 @@ public class SignInActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.sign_in, menu);
+		getMenuInflater().inflate(R.menu.gossip, menu);
 		return true;
 	}
 
@@ -64,52 +64,36 @@ public class SignInActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-    
-	public void signIn(View view) {
-		EditText uname =  (EditText)findViewById(R.id.editText1);
-		EditText pwd =  (EditText)findViewById(R.id.editText2);
+}
 
-		restServicePost.addParam("username", uname.getText().toString());
-	    restServicePost.addParam("password",pwd.getText().toString()); 
-	    try {
-		    intent = new Intent(this, HomeActivity.class);
-
-			restServicePost.execute();
-
+	public void getGossip() {
+        restServicePostR = new RestService(mHandlerPostR, this, "http://jigar-btp.cloudapp.net/gossip_receive/", RestService.POST); //Create new rest service for post
+        try {
+     	   
+			restServicePostR.execute(); //HTTP POSTing to the server
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-	    
-	}
+		}    
 	
-	private final Handler mHandlerP = new Handler(){
+	
+	
+	private final Handler mHandlerPostR = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
-    			//t_query1.setText((String) msg.obj);
-    		Log.i(TAG,((String)msg.obj));
-    		response = ((String)msg.obj).split("\"");
-    		Log.i(TAG,response[3]);
-    		if(response[3].equals("1")){
-    		    Log.i(TAG, "WHy");	
-				startActivity(intent);
+    			tv.setText((String) msg.obj);
+    		}		
+    };
+    
+    Button button = (Button) findViewById(R.id.sendMessageButton);
+	button.setOnClickListener(new View.OnClickListener(){
+		public void onClick(View view){
+			try {
+				restServicePostS.execute(); //Executes the request with the HTTP GET verb
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-    		else {
-    			Context context = getApplicationContext();
-    			CharSequence text = "Couldn't Sign In";
-    			int duration = Toast.LENGTH_SHORT;
-    			Toast toast = Toast.makeText(context, text, duration);
-    			toast.show();
-    		}
-    		
-    		
-    	}
-    		
-	};
+		}
+	});
 	
 }
-
-
-	
-	

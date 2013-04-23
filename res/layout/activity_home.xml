@@ -16,7 +16,8 @@
         android:layout_alignRight="@+id/button3"
         android:layout_below="@+id/button3"
         android:layout_marginTop="28dp"
-        android:text="@string/neighbourhood" />
+        android:text="@string/neighbourhood"
+        android:onClick="neighbourhood" />
 
     <Button
         android:id="@+id/button5"

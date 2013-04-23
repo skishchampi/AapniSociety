@@ -16,7 +16,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/button2"
         android:layout_marginTop="100dp"
-        android:text="@string/add" />
+        android:text="@string/add"
+        android:onClick="add" />
 
     <Button
         android:id="@+id/button2"

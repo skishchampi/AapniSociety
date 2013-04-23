@@ -5,13 +5,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 
 public class HomeActivity extends Activity {
 	
@@ -49,8 +46,9 @@ public class HomeActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
 		switch (item.getItemId()) {
-		case R.id.action_settings:
+		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
 			// activity, the Up button is shown. Use NavUtils to allow users
 			// to navigate up one level in the application structure. For
@@ -58,15 +56,12 @@ public class HomeActivity extends Activity {
 			//
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
-			//NavUtils.navigateUpFromSameTask(this);
+			NavUtils.navigateUpFromSameTask(this);
 			return true;
-		case R.id.sign_out :
-			signOut();
-			return true;
-		default:
-            return super.onOptionsItemSelected(item);
-
 		}
+		return super.onOptionsItemSelected(item);
+
+		
 		
 	}
 	
@@ -82,13 +77,19 @@ public class HomeActivity extends Activity {
 		startActivity(intent);
 	}
     
+	Intent intent2 = new Intent(this, GossipActivity.class);
+    
+	public void gossip(View view){
+		startActivity(intent);
+		
+	}
 	public void signOut() {
 	/*	EditText uname =  (EditText)findViewById(R.id.editText1);
 		EditText pwd =  (EditText)findViewById(R.id.editText2);
 
 		restServicePost.addParam("username", uname.getText().toString());
 	    restServicePost.addParam("password",pwd.getText().toString()); */ 
-	    try {
+	    /*try {
 		    intent = new Intent(this, MainActivity.class);
 
 			restServicePost.execute();
@@ -96,11 +97,11 @@ public class HomeActivity extends Activity {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 	
-	private final Handler mHandlerP = new Handler(){
+/*	private final Handler mHandlerP = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
     			//t_query1.setText((String) msg.obj);
@@ -115,6 +116,6 @@ public class HomeActivity extends Activity {
     		
     	}
     		
-	};
+	}; */
 	
 }

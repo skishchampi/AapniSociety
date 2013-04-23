@@ -16,7 +16,8 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="60dp"
         android:layout_marginLeft="70dp"
-        android:text="@string/add_location" />
+        android:text="@string/add_location"
+        android:onClick="addLocation" />
 
     <EditText
         android:id="@+id/editText1"
@@ -26,8 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="71dp"
         android:ems="10"
-        android:hint="@string/editText1"
-        android:text="@string/editText1" >
+        android:hint="@string/editText1">
 
         <requestFocus />
     </EditText>
@@ -39,6 +39,7 @@
         android:layout_alignLeft="@+id/editText1"
         android:layout_alignRight="@+id/editText1"
         android:layout_below="@+id/editText1"
-        android:layout_marginTop="32dp" />
+        android:layout_marginTop="32dp" 
+        android:entries="@array/type_of_places"/>
 
 </RelativeLayout>

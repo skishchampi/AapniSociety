@@ -9,6 +9,7 @@
     <string name="title_activity_signup">SignupActivity</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
+    <string name="username">Username</string>
     <string name="email">Email</string>
     <string name="reenter_email">Reenter Email</string>
     <string name="password">Password</string>
@@ -29,6 +30,7 @@
     <string name="search_place">Search for a place</string>
     <string name="pick_date">Birthdate</string>
     <string name="sign_out">Sign Out</string>
+
     <string-array name="services">
         <item>Maid</item>
         <item>Cook</item>
@@ -36,10 +38,18 @@
         <item>Carpenter</item>
         <item>Doctor</item>
     </string-array>
-
+	
+    <string-array name="type_of_places">
+        <item>Vegetables</item>
+        <item>Laundry</item>
+        <item>Groceries</item>
+        <item>frozen food</item>
+    </string-array>
+    
     <string name="title_activity_search_nbh">SearchNbhActivity</string>
     <string name="title_activity_nbh">NbhActivity</string>
     <string name="title_activity_nbh_select">NbhSelectActivity</string>
     <string name="title_activity_sign_in">SignInActivity</string>
+    <string name="title_activity_gossip">GossipActivity</string>
 
 </resources>

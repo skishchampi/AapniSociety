@@ -8,40 +8,44 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".RequestServiceActivity" >
 
-    <Spinner 
-    	android:id="@+id/services"
-    	android:layout_width="fill_parent"
-    	android:layout_height="wrap_content"/>
-    <TimePicker
-        android:id="@+id/timePicker2"
+    <RadioGroup
+        android:id="@+id/radioGroup1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/timePicker1"
-        android:layout_below="@+id/timePicker1" />
-
-    <RadioButton
-        android:id="@+id/radioButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/timePicker2"
-        android:layout_below="@+id/timePicker2"
-        android:layout_marginTop="23dp"
-        android:text="@string/right_now" />
+        android:layout_height="wrap_content" >
+    </RadioGroup>
 
     <RadioButton
         android:id="@+id/radioButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/radioButton1"
         android:layout_alignLeft="@+id/radioButton1"
-        android:layout_below="@+id/radioButton1"
+        android:layout_marginBottom="36dp"
         android:text="@string/long_term" />
 
-    <TimePicker
-        android:id="@+id/timePicker1"
+    <Spinner
+        android:id="@+id/services"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/radioGroup1"
+        android:entries="@array/services" />
+
+    <Button
+        android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/radioButton1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="66dp" />
+        android:layout_marginTop="50dp"
+        android:text="Send Request" />
+
+    <RadioButton
+        android:id="@+id/radioButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/right_now" />
 
 </RelativeLayout>

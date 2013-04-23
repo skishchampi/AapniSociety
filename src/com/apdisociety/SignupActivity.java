@@ -2,12 +2,10 @@ package com.apdisociety;
 
 import java.util.Calendar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +26,8 @@ public class SignupActivity extends FragmentActivity {
 	RestService restServicePost;
 	private static final String TAG = "MyActivity";
 	public static String[] response;
+	public static int y,m,d;
+	Intent intent;
 	
 	public static class DatePickerFragment extends DialogFragment
     implements DatePickerDialog.OnDateSetListener {
@@ -46,6 +46,9 @@ public class SignupActivity extends FragmentActivity {
 
 	public void onDateSet(DatePicker view, int year, int month, int day) {
 	// Do something with the date chosen by the user
+		y = year ;
+		m = month + 1;
+		d = day;
 	}
 	
 	
@@ -114,10 +117,11 @@ public class SignupActivity extends FragmentActivity {
 	}); */
 	
 	public void signUp(View view) {
+	  EditText uname = (EditText)findViewById(R.id.editText3);
 	  EditText fname = (EditText)findViewById(R.id.editText1);
 	  EditText lname = (EditText)findViewById(R.id.editText5);
 	  EditText mail1 = (EditText)findViewById(R.id.editText2);
-	  EditText mail2 = (EditText)findViewById(R.id.editText3);
+	  
 	  EditText pwd = (EditText)findViewById(R.id.editText4);
 	  
 	  String email = mail1.getText().toString();
@@ -127,18 +131,26 @@ public class SignupActivity extends FragmentActivity {
 	  System.out.print(pwd.getText().toString());
 	  System.out.print(email);
 	  
-	  
-      restServicePost.addParam("username", fname.getText().toString()); //Add params to request
-      restServicePost.addParam("password",pwd.getText().toString()); //Format for a typical form encoded nested attribute
+	  restServicePost.addParam("first_name", fname.getText().toString()); //Add params to request
+      restServicePost.addParam("last_name", lname.getText().toString()); //Add params to request
+      restServicePost.addParam("username", uname.getText().toString()); //Add params to request
       restServicePost.addParam("email",email);
+      restServicePost.addParam("password",pwd.getText().toString()); //Format for a typical form encoded nested attribute
+      restServicePost.addParam("sex",mf);
+      restServicePost.addParam("year",Integer.toString(y));
+      restServicePost.addParam("month",Integer.toString(m));
+      restServicePost.addParam("day",Integer.toString(d));
       
-      
+      intent = new Intent (this, SignInActivity.class);
       try {
     	   
 			restServicePost.execute(); //HTTP POSTing to the server
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}    
+      
+      
 	}
     
 	private final Handler mHandlerP = new Handler(){
@@ -148,6 +160,11 @@ public class SignupActivity extends FragmentActivity {
     		Log.i(TAG,((String)msg.obj));
     		response = ((String)msg.obj).split("\"");
     		Log.i(TAG,response[3]);
+    		if(response[3].equals("1")){
+    		    Log.i(TAG, "WHy");	
+				startActivity(intent);
+			}
+    		
     		
     		
     		}		
