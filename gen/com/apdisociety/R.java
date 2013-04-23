@@ -34,11 +34,11 @@ public final class R {
     public static final class id {
         public static final int action_forgot_password=0x7f0a001f;
         public static final int action_settings=0x7f0a001e;
-        public static final int button1=0x7f0a0006;
+        public static final int button1=0x7f0a0001;
         public static final int button2=0x7f0a0007;
-        public static final int button3=0x7f0a0004;
-        public static final int button4=0x7f0a0003;
-        public static final int button5=0x7f0a0005;
+        public static final int button3=0x7f0a0005;
+        public static final int button4=0x7f0a0004;
+        public static final int button5=0x7f0a0006;
         public static final int editText1=0x7f0a0011;
         public static final int editText2=0x7f0a0017;
         public static final int editText3=0x7f0a0019;
@@ -53,7 +53,7 @@ public final class R {
         public static final int login_status=0x7f0a0008;
         public static final int login_status_message=0x7f0a0009;
         public static final int map=0x7f0a0023;
-        public static final int message=0x7f0a0001;
+        public static final int message=0x7f0a0002;
         public static final int messageHistory=0x7f0a0000;
         public static final int password=0x7f0a000c;
         public static final int radioButton1=0x7f0a0015;
@@ -62,7 +62,7 @@ public final class R {
         public static final int radioGroup1=0x7f0a0013;
         public static final int radioMale=0x7f0a001c;
         public static final int radioSex=0x7f0a001b;
-        public static final int sendMessageButton=0x7f0a0002;
+        public static final int sendMessageButton=0x7f0a0003;
         public static final int services=0x7f0a0016;
         public static final int sign_in_button=0x7f0a000e;
         public static final int signin=0x7f0a0010;

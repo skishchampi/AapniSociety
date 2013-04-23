@@ -77,9 +77,10 @@ public class HomeActivity extends Activity {
 		startActivity(intent);
 	}
     
-	Intent intent2 = new Intent(this, GossipActivity.class);
+	
     
 	public void gossip(View view){
+		Intent intent = new Intent(this, GossipActivity.class);
 		startActivity(intent);
 		
 	}

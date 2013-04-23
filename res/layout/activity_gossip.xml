@@ -25,26 +25,33 @@
         	    android:scrollbarSize="10px"
         	     /> 
         
-    <LinearLayout android:orientation="horizontal"
-    			  android:layout_width="fill_parent"
-    			  android:layout_height="fill_parent"
-    			  android:layout_weight="4">
-		
-			<EditText 	android:id="@+id/message"
-			 			android:layout_width="fill_parent"
-		        		android:layout_height="fill_parent"
-		        		android:gravity="top"
-		      			android:layout_weight="1"
-		      			/>
-		      			 		  
-		    <Button android:id="@+id/sendMessageButton"
-		        	android:layout_width="fill_parent"
-		        	android:layout_height="fill_parent"
-		        	android:layout_weight="4"
-		        	android:text="Go"/>
-   
-	</LinearLayout>
-    
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="4"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="59dp"
+            android:layout_height="76dp"
+            android:text="U"
+            android:onClick="getGossip" />
+
+        <EditText
+            android:id="@+id/message"
+            android:layout_width="131dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.87"
+            android:gravity="top" />
+
+        <Button
+            android:id="@+id/sendMessageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:text="Go" />
+
+    </LinearLayout>
 
 </LinearLayout>
 

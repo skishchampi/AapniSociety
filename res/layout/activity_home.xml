@@ -57,6 +57,7 @@
         android:layout_alignRight="@+id/button1"
         android:layout_below="@+id/button2"
         android:layout_marginTop="18dp"
-        android:text="@string/gossip" />
+        android:text="@string/gossip"
+        android:onClick="gossip"  />
 
 </RelativeLayout>

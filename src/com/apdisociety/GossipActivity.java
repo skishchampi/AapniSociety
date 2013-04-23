@@ -7,29 +7,53 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 public class GossipActivity extends Activity {
     
-	TextView tv  = (TextView) findViewById(R.id.messageHistory);
-	RestService restServicePostR, restServicePostS;
+	RestService restServicePostS, restServicePostR;
 	EditText send;
-
-    
+	TextView tv;
+	private static final String TAG = "GossipActivity";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
+		Log.i(TAG,"asd");
+		
 		super.onCreate(savedInstanceState);
+		Log.i(TAG,"asd");
 		setContentView(R.layout.activity_gossip);
+		Log.i(TAG,"asd");
 		// Show the Up button in the action bar.
 		setupActionBar();
-		getGossip();
+		Log.i(TAG,"asd");
+
+		
+		Log.i(TAG,"asd");
 	}
 	
+	public void getGossip(View view){
+		 tv  = (TextView) findViewById(R.id.messageHistory);
+		Log.i(TAG,"asd");
+		restServicePostR = new RestService(mHandlerPostR,this, "http://jigar-btp.cloudapp.net/gossip_receive/", RestService.POST);
+		Log.i(TAG,"asd");
+		try{
+			Log.i(TAG,"asd");
+			restServicePostR.execute();
+			Log.i(TAG,"asd");
+		}
+		catch(Exception e){
+			Log.i(TAG,"asd");
+			e.printStackTrace();
+			Log.i(TAG,"asd");
+			
+		}
+	}
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -64,36 +88,21 @@ public class GossipActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-}
 
-	public void getGossip() {
-        restServicePostR = new RestService(mHandlerPostR, this, "http://jigar-btp.cloudapp.net/gossip_receive/", RestService.POST); //Create new rest service for post
-        try {
-     	   
-			restServicePostR.execute(); //HTTP POSTing to the server
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}    
-	
-	
-	
+
 	private final Handler mHandlerPostR = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
     			tv.setText((String) msg.obj);
-    		}		
+    			Log.i(TAG,"asd");
+    		}	
     };
+	
+	
+	
+	
+	
     
-    Button button = (Button) findViewById(R.id.sendMessageButton);
-	button.setOnClickListener(new View.OnClickListener(){
-		public void onClick(View view){
-			try {
-				restServicePostS.execute(); //Executes the request with the HTTP GET verb
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	});
+    
 	
 }
