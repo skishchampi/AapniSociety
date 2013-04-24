@@ -126,8 +126,9 @@ public class GossipActivity extends Activity {
 	}
 
     public static String[] array;
-    public static ArrayList<String> str;
-	public int i=0;
+    public static String[] array2=new String[100];
+    
+    public static ArrayList<String> str=new ArrayList<String>();
 	
 	private final Handler mHandlerPostR = new Handler(){
     	@Override
@@ -137,17 +138,19 @@ public class GossipActivity extends Activity {
     			/*for(int i =0;i < array.length; i++ ){
     				tv.setText(array[i]);
     			}*/
-    			Integer len=array.length;
-    			Log.i(TAG,len.toString());
-    			for(i=0;i<array.length;i++)
+    			//Integer len=array.length;
+    			//Log.i(TAG,len.toString());
+    			/*int i=0;
+    			while(i!=array.length-1)
     			{	
     				if(i%2==1)
     				{	
-    				
-    					//str.add(array[i]);
+    					int j=(i+1)/2;
+    					array2[j]=array[i];
     				}
+    				i++;
     			}
-    			
+    			i=0; */
     			display(array);
     		}	
     };

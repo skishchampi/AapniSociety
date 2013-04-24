@@ -2,14 +2,20 @@ package com.apdisociety;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class RequestServiceActivity extends Activity {
 
+	//RestService r;
+	//private static final String TAG = "RequestServiceActivity";
+	//Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,5 +57,60 @@ public class RequestServiceActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
+	public void sendRequest (View view){
+		Intent intent = new Intent(this, ServiceProviderActivity.class);
+		startActivity(intent);
+	}
+	
+	/*public void sendRequest(View view){
+		
+		
+		r = new RestService(mHandlerR, this, "http://jigar-btp.cloudapp.net/service_request/", RestService.POST);
+    	r.addParam("service_name",String.valueOf(spinner.getSelectedItem()));
+    	try{
+    		r.execute();
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+		
+		//Intent intent = new Intent(this, ServiceProviderActivity.class);
+		//startActivity(intent);
+	}
+	
+	private final Handler mHandlerR = new Handler(){
+    	@Override
+    	public void handleMessage(Message msg){
+    			//tv.setText((String) msg.obj);
+    	//		array = ((String)msg.obj).split("\"");
+    			/*for(int i =0;i < array.length; i++ ){
+    				tv.setText(array[i]);
+    			}*/
+    			//Integer len=array.length;
+    			//Log.i(TAG,len.toString());
+    		//	int i=0;
+    			//while(i!=array.length-1)
+    			//{	
+    				//if(i%2==1)
+    				//{	
+    					//int j=(i+1)/2;
+    					//array2[j]=array[i];
+    				//}
+    				//i++;
+    			//}
+    			//i=0;
+    			//display(array2);
+    /*		
+    		Context context = getApplicationContext();
+			CharSequence text = (String) msg.obj;
+			int duration = Toast.LENGTH_LONG;
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+    		}	
+    };
+	
+	
+	
+	*/
 }

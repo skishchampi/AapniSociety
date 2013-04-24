@@ -36,8 +36,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="35dp"
-        android:onClick="requestService"
-        android:text="@string/request_service" />
+        android:text="@string/request_service"
+        android:onClick="requestService" />
 
     <Button
         android:id="@+id/button2"

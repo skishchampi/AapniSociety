@@ -140,6 +140,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apdisociety.HomeActivity" />
         </activity>
+        <activity
+            android:name="com.apdisociety.ServiceProviderActivity"
+            android:label="@string/title_activity_service_provider" >
+        </activity>
     </application>
 
 </manifest>

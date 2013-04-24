@@ -38,18 +38,18 @@
         <item>Carpenter</item>
         <item>Doctor</item>
     </string-array>
-	
     <string-array name="type_of_places">
         <item>Vegetables</item>
         <item>Laundry</item>
         <item>Groceries</item>
         <item>frozen food</item>
     </string-array>
-    
+
     <string name="title_activity_search_nbh">SearchNbhActivity</string>
     <string name="title_activity_nbh">NbhActivity</string>
     <string name="title_activity_nbh_select">NbhSelectActivity</string>
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="title_activity_gossip">GossipActivity</string>
+    <string name="title_activity_service_provider">ServiceProviderActivity</string>
 
 </resources>
