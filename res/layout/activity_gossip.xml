@@ -14,7 +14,7 @@
         		android:layout_marginBottom="10dip"
         		android:text="Messages:"/>
     
-    <TextView 	android:id="@+id/messageHistory"
+    <ListView 	android:id="@+id/messageHistory"
         		android:layout_width="fill_parent"
         		android:layout_height="fill_parent"
         		android:clickable="true"	

@@ -80,6 +80,7 @@ public final class R {
         public static final int activity_search_nbh=0x7f030007;
         public static final int activity_sign_in=0x7f030008;
         public static final int activity_signup=0x7f030009;
+        public static final int list_messages=0x7f03000a;
     }
     public static final class menu {
         public static final int gossip=0x7f090000;

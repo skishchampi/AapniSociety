@@ -1,9 +1,10 @@
 package com.apdisociety;
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,7 +14,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,10 +41,12 @@ public class GossipActivity extends Activity {
 
 		
 		Log.i(TAG,"asd");
+		
+
 	}
 	
 	public void getGossip(View view){
-		 tv  = (TextView) findViewById(R.id.messageHistory);
+		// tv  = (TextView) findViewById(R.id.messageHistory);
 		Log.i(TAG,"asd");
 		restServicePostR = new RestService(mHandlerPostR,this, "http://jigar-btp.cloudapp.net/gossip_receive/", RestService.POST);
 		Log.i(TAG,"asd");
@@ -58,7 +63,7 @@ public class GossipActivity extends Activity {
 		}
 	}
 	public void getGossip(){
-		 tv  = (TextView) findViewById(R.id.messageHistory);
+		// tv  = (TextView) findViewById(R.id.messageHistory);
 		Log.i(TAG,"asd");
 		restServicePostR = new RestService(mHandlerPostR,this, "http://jigar-btp.cloudapp.net/gossip_receive/", RestService.POST);
 		Log.i(TAG,"asd");
@@ -120,20 +125,41 @@ public class GossipActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-    public static String[] array,array2;
+	public  static String[] array=new String[30];
+	public  static ArrayList<String> list=new ArrayList<String>();
+	public  static String[] array2=new String[6];
+//    public static String[] array2=new String[100];
+	
 	private final Handler mHandlerPostR = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
-    			tv.setText((String) msg.obj);
-    			array = ((String)msg.obj).split("\"");
-    			//for(int i =0;i < array.length; i++ ){
-    				//tv.setText(array[i]);
-    			//}
-    			for(int i=1;i<array.length;i=i+2)
-    				array2[i/2]=array[i];
-    			Log.i(TAG,"asd");
+    			
+    			display_string((String) msg.obj);
     		}	
     };
+    
+    public void display_string(String s)
+    {
+    	//tv.setText((String) msg.obj);
+		array = s.split(",");
+		display(array);
+    }
+    public void display(String[] array3){
+    	int i=0,count=0;
+		for(i=0;i<array.length;i++)
+		{
+			//Log.i(TAG,array[i]);
+			if (array[i].contains("\""))
+			{	String str1="Anon:";
+				array[i]=str1+array[i].split("\"")[1];					
+			}
+		}
+    	ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_messages, array);			
+		
+		ListView listView = (ListView) findViewById(R.id.messageHistory);
+		listView.setAdapter(adapter);
+		Log.i(TAG,"asd");
+    }
     
     public static String[] response;
     //Intent intent = new Intent(this,GossipActivity.class);
@@ -168,7 +194,7 @@ public class GossipActivity extends Activity {
     		}	
     };
 	
-	
+   
 	
 	
 	
