@@ -114,6 +114,7 @@ public class RestService{
 	     intent.putExtra("receiver", receiver);
 	     intent.putExtra("method", RequestType);
 	     intent.putExtra("entity", entity);
+	     
 	     mContext.startService(intent);
 	}
 }

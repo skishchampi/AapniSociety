@@ -52,6 +52,7 @@ public class ExecuteRequest extends IntentService {
 		receiver = (ResultReceiver) intent.getParcelableExtra("receiver");
 		method = (int) intent.getIntExtra("method", 1);
 		entity = intent.getStringExtra("entity");
+		
 		try {
 			execute(method);
 		} catch (Exception e) {
@@ -156,12 +157,12 @@ public class ExecuteRequest extends IntentService {
     }
     
 	private void commit(){
-		HttpClient client = new DefaultHttpClient();
+//		HttpClient client = new DefaultHttpClient();
 
         HttpResponse httpResponse;
 
         try {
-            httpResponse = client.execute(request);
+            httpResponse = Client.client.execute(request);
             responseCode = httpResponse.getStatusLine().getStatusCode();
             message = httpResponse.getStatusLine().getReasonPhrase();
 
@@ -180,10 +181,10 @@ public class ExecuteRequest extends IntentService {
             }
 
         } catch (ClientProtocolException e)  {
-            client.getConnectionManager().shutdown();
+            Client.client.getConnectionManager().shutdown();
             e.printStackTrace();
         } catch (IOException e) {
-            client.getConnectionManager().shutdown();
+            Client.client.getConnectionManager().shutdown();
             e.printStackTrace();
         }
 	}

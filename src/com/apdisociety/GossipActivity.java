@@ -2,6 +2,8 @@ package com.apdisociety;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class GossipActivity extends Activity {
     
@@ -54,7 +57,35 @@ public class GossipActivity extends Activity {
 			
 		}
 	}
-
+	public void getGossip(){
+		 tv  = (TextView) findViewById(R.id.messageHistory);
+		Log.i(TAG,"asd");
+		restServicePostR = new RestService(mHandlerPostR,this, "http://jigar-btp.cloudapp.net/gossip_receive/", RestService.POST);
+		Log.i(TAG,"asd");
+		try{
+			Log.i(TAG,"asd");
+			restServicePostR.execute();
+			Log.i(TAG,"asd");
+		}
+		catch(Exception e){
+			Log.i(TAG,"asd");
+			e.printStackTrace();
+			Log.i(TAG,"asd");
+			
+		}
+	}
+    public void sendGossip(View view){
+    	send = (EditText) findViewById(R.id.message);
+    	restServicePostS = new RestService(mHandlerPostS, this, "http://jigar-btp.cloudapp.net/gossip_enter/", RestService.POST);
+    	restServicePostS.addParam("chat", send.getText().toString());
+    	try{
+    		restServicePostS.execute();
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */
@@ -89,12 +120,51 @@ public class GossipActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-
+    public static String[] array,array2;
 	private final Handler mHandlerPostR = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
     			tv.setText((String) msg.obj);
+    			array = ((String)msg.obj).split("\"");
+    			//for(int i =0;i < array.length; i++ ){
+    				//tv.setText(array[i]);
+    			//}
+    			for(int i=1;i<array.length;i=i+2)
+    				array2[i/2]=array[i];
     			Log.i(TAG,"asd");
+    		}	
+    };
+    
+    public static String[] response;
+    //Intent intent = new Intent(this,GossipActivity.class);
+    
+	private final Handler mHandlerPostS = new Handler(){
+    	@Override
+    	public void handleMessage(Message msg){
+    			
+    			Log.i(TAG,"asd");
+    			Log.i(TAG,((String)msg.obj));
+        		response = ((String)msg.obj).split("\"");
+        		Log.i(TAG,response[3]);
+        		if(response[3].equals("1")){
+        		    Log.i(TAG, "WHy");
+        		    getGossip();
+        		    Context context = getApplicationContext();
+        			CharSequence text = "Message sent";
+        			int duration = Toast.LENGTH_SHORT;
+        			Toast toast = Toast.makeText(context, text, duration);
+        			toast.show();
+        			send.setText("");
+        			//tv.setText((String) msg.obj);
+    				
+    			}
+        		else {
+        			Context context = getApplicationContext();
+        			CharSequence text = "Message couldn't be sent";
+        			int duration = Toast.LENGTH_SHORT;
+        			Toast toast = Toast.makeText(context, text, duration);
+        			toast.show();
+        		}
     		}	
     };
 	
