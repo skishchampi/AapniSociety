@@ -1,7 +1,10 @@
 package com.apdisociety;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
+//import TimerDemo.RemindTask;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -19,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.*;
 
 public class GossipActivity extends Activity {
     
@@ -38,13 +42,34 @@ public class GossipActivity extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		Log.i(TAG,"asd");
-
+		func();
 		
 		Log.i(TAG,"asd");
 		
 
 	}
 	
+	//***********************************************
+	
+	
+	Timer timer;
+
+    public void func() {
+    	Log.i(TAG,"func called");
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new RemindTask(),0,10000);
+	}
+
+    class RemindTask extends TimerTask {
+        public void run() {
+            //GossipActivity act=new GossipActivity();
+            GossipActivity.this.getGossip();
+        	// timer.cancel(); //Terminate the timer thread
+        }
+    }
+	
+	
+	//************************************************
 	public void getGossip(View view){
 		// tv  = (TextView) findViewById(R.id.messageHistory);
 		Log.i(TAG,"asd");

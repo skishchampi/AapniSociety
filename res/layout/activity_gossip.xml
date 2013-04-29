@@ -31,12 +31,7 @@
         android:layout_weight="4"
         android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="59dp"
-            android:layout_height="76dp"
-            android:text="U"
-            android:onClick="getGossip" />
+
 
         <EditText
             android:id="@+id/message"

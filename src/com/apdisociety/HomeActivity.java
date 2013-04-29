@@ -81,8 +81,7 @@ public class HomeActivity extends Activity {
     
 	public void gossip(View view){
 		Intent intent = new Intent(this, GossipActivity.class);
-		startActivity(intent);
-		
+		startActivity(intent);	
 	}
 	public void signOut() {
 	/*	EditText uname =  (EditText)findViewById(R.id.editText1);
