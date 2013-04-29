@@ -6,7 +6,19 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/background"
     tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/signin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/signup"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/signup"
+        android:layout_marginBottom="146dp"
+        android:onClick="signIn"
+        android:text="Sign In" />
 
     <Button
         android:id="@+id/signup"
@@ -14,19 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignTop="@+id/signin"
-        android:layout_marginRight="20dp"
-        android:text="Register" 
-        android:onClick="register"/>
-
-    <Button
-        android:id="@+id/signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="24dp"
-        android:text="Sign In" 
-        android:onClick ="signIn"/>
+        android:layout_marginRight="14dp"
+        android:layout_marginTop="68dp"
+        android:onClick="register"
+        android:text="Register" />
 
 </RelativeLayout>

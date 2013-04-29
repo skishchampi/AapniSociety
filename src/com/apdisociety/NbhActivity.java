@@ -11,6 +11,8 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -26,6 +28,7 @@ public class NbhActivity extends Activity {
     private double plat;
     private double plon;
     int flag=0;
+    RestService r;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,9 @@ public class NbhActivity extends Activity {
 	}
     
 	public void addLocation(View view){
+		
+		r = new RestService(mHandler, this, "http://jigar-btp.cloudapp.net/suggest_places/", RestService.POST);
+		
 		pname = ((EditText)findViewById(R.id.editText1)).getText().toString();
 		ptype = String.valueOf(((Spinner)findViewById(R.id.spinner1)).getSelectedItem());
 		
@@ -126,10 +132,40 @@ public class NbhActivity extends Activity {
 			    			}).start();
           	   
 		   	    }
+      	   r.addParam("name", pname);
+      	 r.addParam("type", ptype);
+      	r.addParam("plat", Double.toString(plat));
+      	r.addParam("plon", Double.toString(plon));
+      	   
+      	   try{
+      		   r.execute();
+      		   
+      	   }catch (Exception e){
+      		   e.printStackTrace();
+      	   }
 		}
 		
 		
 	}
+	
+	private final Handler mHandler = new Handler(){
+    	@Override
+    	public void handleMessage(Message msg){
+    			//t_query1.setText((String) msg.obj);
+    		//Log.i(TAG,((String)msg.obj));
+    		//response = ((String)msg.obj).split("\"");
+    		//Log.i(TAG,response[3]);
+    		//if(response[3].equals("1")){
+    		 //   Log.i(TAG, "WHy");	
+				//startActivity(intent);
+			//}
+    		
+    		
+    		
+    		}		
+    };
+	
+	
 	 protected Dialog onCreateDialog(int id) {
 	     if(id == 3){
 	             ProgressDialog loadingDialog = new ProgressDialog(this);

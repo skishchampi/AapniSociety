@@ -30,6 +30,8 @@
     <string name="search_place">Search for a place</string>
     <string name="pick_date">Birthdate</string>
     <string name="sign_out">Sign Out</string>
+    <string name="type_phone">Phone Number</string>
+    <string name="type_email">E-Mail</string>
 
     <string-array name="services">
         <item>Maid</item>
@@ -51,5 +53,7 @@
     <string name="title_activity_sign_in">SignInActivity</string>
     <string name="title_activity_gossip">GossipActivity</string>
     <string name="title_activity_service_provider">ServiceProviderActivity</string>
+    <string name="title_activity_search_service">SearchServiceActivity</string>
+    <string name="title_activity_select_contact">SelectContactActivity</string>
 
 </resources>

@@ -1,14 +1,19 @@
 package com.apdisociety;
 
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 	
@@ -16,13 +21,16 @@ public class HomeActivity extends Activity {
 	private static final String TAG = "SignInActivity";
 	public Intent intent;
 	public static String[] response;
-
+    
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
 	}
 
 	/**
@@ -84,35 +92,45 @@ public class HomeActivity extends Activity {
 		startActivity(intent);
 		
 	}
-	public void signOut() {
-	/*	EditText uname =  (EditText)findViewById(R.id.editText1);
-		EditText pwd =  (EditText)findViewById(R.id.editText2);
+  
 
-		restServicePost.addParam("username", uname.getText().toString());
-	    restServicePost.addParam("password",pwd.getText().toString()); */ 
-	    /*try {
-		    intent = new Intent(this, MainActivity.class);
-
+/*	public void signOut() {
+		
+		//EditText uname =  (EditText)findViewById(R.id.editText1);
+		//EditText pwd =  (EditText)findViewById(R.id.editText2);
+        restServicePost = new RestService(mHandlerP,this, "http://jigar-btp.cloudapp.net/logout/",RestService.POST);
+		//restServicePost.addParam("username", uname.getText().toString());
+	    //restServicePost.addParam("password",pwd.getText().toString());  
+	    try {
+	    	Log.i(TAG, "Fuck you");
 			restServicePost.execute();
-
+			Log.i(TAG, "Fuck you sucker");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 		
 	}
+	public void callback(String value){
+		Intent  intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
+	}
 	
-/*	private final Handler mHandlerP = new Handler(){
+	private final Handler mHandlerP = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
+    		
     			//t_query1.setText((String) msg.obj);
     		Log.i(TAG,((String)msg.obj));
     		response = ((String)msg.obj).split("\"");
     		Log.i(TAG,response[3]);
     		if(response[3].equals("1")){
     		    Log.i(TAG, "WHy");	
-				startActivity(intent);
-			}
+				//startActivity(intent);
+    		    callback(response[3]);
+			}else{
+				(Toast.makeText(getApplicationContext(), "Couldn't Sign you out", Toast.LENGTH_SHORT)).show();
+			} 
     		
     		
     	}
