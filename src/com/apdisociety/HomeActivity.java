@@ -6,10 +6,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 	
@@ -90,7 +94,7 @@ public class HomeActivity extends Activity {
 	}
   
 
-/*	public void signOut() {
+	public void signOut(View view) {
 		
 		//EditText uname =  (EditText)findViewById(R.id.editText1);
 		//EditText pwd =  (EditText)findViewById(R.id.editText2);
@@ -123,6 +127,7 @@ public class HomeActivity extends Activity {
     		if(response[3].equals("1")){
     		    Log.i(TAG, "WHy");	
 				//startActivity(intent);
+    		    (Toast.makeText(getApplicationContext(), "Signed you out", Toast.LENGTH_SHORT)).show();
     		    callback(response[3]);
 			}else{
 				(Toast.makeText(getApplicationContext(), "Couldn't Sign you out", Toast.LENGTH_SHORT)).show();
@@ -131,6 +136,6 @@ public class HomeActivity extends Activity {
     		
     	}
     		
-	}; */
+	}; 
 	
 }

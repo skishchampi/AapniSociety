@@ -5,6 +5,7 @@ import java.util.Calendar;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 public class SignupActivity extends FragmentActivity {
 
@@ -27,6 +29,7 @@ public class SignupActivity extends FragmentActivity {
 	private static final String TAG = "MyActivity";
 	public static String[] response;
 	public static int y,m,d;
+	public static String phone;
 	Intent intent;
 	
 	public static class DatePickerFragment extends DialogFragment
@@ -122,7 +125,7 @@ public class SignupActivity extends FragmentActivity {
 	  EditText fname = (EditText)findViewById(R.id.editText1);
 	  EditText lname = (EditText)findViewById(R.id.editText5);
 	  EditText mail1 = (EditText)findViewById(R.id.editText2);
-	  
+	  phone = (((EditText)findViewById(R.id.editText6)).getText().toString());
 	  EditText pwd = (EditText)findViewById(R.id.editText4);
 	  
 	  String email = mail1.getText().toString();
@@ -141,10 +144,11 @@ public class SignupActivity extends FragmentActivity {
       restServicePost.addParam("year",Integer.toString(y));
       restServicePost.addParam("month",Integer.toString(m));
       restServicePost.addParam("day",Integer.toString(d));
+      restServicePost.addParam("contact",phone );
       
       intent = new Intent (this, SignInActivity.class);
       try {
-    	   
+    	    Log.i(TAG,"Signing In");
 			restServicePost.execute(); //HTTP POSTing to the server
 			
 		} catch (Exception e) {
@@ -164,6 +168,12 @@ public class SignupActivity extends FragmentActivity {
     		if(response[3].equals("1")){
     		    Log.i(TAG, "WHy");	
 				startActivity(intent);
+			}else if(response[3].equals("2")){
+				Context context = getApplicationContext();
+    			CharSequence text = "Username already taken!";
+    			int duration = Toast.LENGTH_LONG;
+    			Toast toast = Toast.makeText(context, text, duration);
+    			toast.show();
 			}
     		
     		

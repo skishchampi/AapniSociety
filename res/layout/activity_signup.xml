@@ -13,8 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:orientation="vertical" >
+
         <EditText
             android:id="@+id/editText1"
             android:layout_width="wrap_content"
@@ -22,10 +23,7 @@
             android:layout_marginTop="38dp"
             android:ems="10"
             android:hint="@string/first_name"
-            android:inputType="textPersonName" >
-
-            <requestFocus />
-        </EditText>
+            android:inputType="textPersonName" />
 
         <EditText
             android:id="@+id/editText5"
@@ -42,6 +40,14 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/username" />
+
+        <EditText
+            android:id="@+id/editText6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Phone Number"
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/editText2"
@@ -99,7 +105,6 @@
             android:layout_marginRight="15dp"
             android:onClick="signUp"
             android:text="@string/signup" />
-
     </LinearLayout>
 
 </RelativeLayout>
