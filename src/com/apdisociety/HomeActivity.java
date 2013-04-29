@@ -21,7 +21,7 @@ public class HomeActivity extends Activity {
 	private static final String TAG = "SignInActivity";
 	public Intent intent;
 	public static String[] response;
-    
+	SessionManager session;
 	
 	
 	@Override
@@ -30,6 +30,9 @@ public class HomeActivity extends Activity {
 		setContentView(R.layout.activity_home);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
+		session = new SessionManager(getApplicationContext());
+		session.checkLogin();
 		
 	}
 
@@ -112,6 +115,7 @@ public class HomeActivity extends Activity {
 		
 	}
 	public void callback(String value){
+		session.logoutUser();
 		Intent  intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 	}

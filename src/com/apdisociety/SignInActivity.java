@@ -22,9 +22,22 @@ public class SignInActivity extends Activity {
 	private static final String TAG = "SignInActivity";
 	public Intent intent;
 	public static String[] response;
-	@Override
+	
+	
+	  // Session Manager Class
+    SessionManager session;
+	
+	
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Session Manager
+        session = new SessionManager(getApplicationContext());           
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+		
+		
+		
 		setContentView(R.layout.activity_sign_in);
 		// Show the Up button in the action bar.
 		restServicePost = new RestService(mHandlerP, this, "http://jigar-btp.cloudapp.net/login/", RestService.POST); //Create new rest service for post
@@ -64,11 +77,11 @@ public class SignInActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-    
+	public EditText uname, pwd;
 	public void signIn(View view) {
-		EditText uname =  (EditText)findViewById(R.id.editText1);
-		EditText pwd =  (EditText)findViewById(R.id.editText2);
-
+		uname =  (EditText)findViewById(R.id.editText1);
+		pwd =  (EditText)findViewById(R.id.editText2);
+		if(uname.getText().toString().trim().length() > 0 && pwd.getText().toString().trim().length() > 0){ 
 		restServicePost.addParam("username", uname.getText().toString());
 	    restServicePost.addParam("password",pwd.getText().toString()); 
 	    try {
@@ -80,7 +93,15 @@ public class SignInActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		}else{
+			Context context = getApplicationContext();
+			CharSequence text = "Please Enter a Username and Password";
+			int duration = Toast.LENGTH_SHORT;
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+
+			
+		}
 	    
 	}
 	
@@ -93,6 +114,7 @@ public class SignInActivity extends Activity {
     		Log.i(TAG,response[3]);
     		if(response[3].equals("1")){
     		    Log.i(TAG, "WHy");	
+    		    session.createLoginSession(uname.getText().toString(), pwd.getText().toString());
 				startActivity(intent);
 			}
     		else {
