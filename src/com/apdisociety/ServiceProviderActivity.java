@@ -18,7 +18,8 @@ public class ServiceProviderActivity extends Activity implements OnItemClickList
     String[] val = {"sunday","monday","tuesday","thrusday","friday","wednesday","march"};
     ListView list;
     Dialog listDialog;
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          showdialog();
     }
@@ -40,19 +41,22 @@ public class ServiceProviderActivity extends Activity implements OnItemClickList
          listDialog.show();
     }
  
-    public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+    @Override
+	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
     {
  
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Delete item "+arg2)
                    .setPositiveButton("OK ", new DialogInterface.OnClickListener() {
-                   public void onClick(DialogInterface dialog, int id) {
+                   @Override
+				public void onClick(DialogInterface dialog, int id) {
                        System.out.println("OK CLICKED");
  
                    }
                });
         builder.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-               public void onClick(DialogInterface dialog, int id) {
+               @Override
+			public void onClick(DialogInterface dialog, int id) {
                  dialog.dismiss();
                  listDialog.cancel();
  

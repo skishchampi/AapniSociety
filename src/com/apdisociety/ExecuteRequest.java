@@ -11,7 +11,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -19,7 +18,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 
 import android.app.IntentService;
@@ -50,7 +48,7 @@ public class ExecuteRequest extends IntentService {
 		headers = intent.getParcelableArrayListExtra("headers");
 		url = intent.getStringExtra("url");
 		receiver = (ResultReceiver) intent.getParcelableExtra("receiver");
-		method = (int) intent.getIntExtra("method", 1);
+		method = intent.getIntExtra("method", 1);
 		entity = intent.getStringExtra("entity");
 		
 		try {

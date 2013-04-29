@@ -53,8 +53,10 @@ public class SearchServiceActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	Intent intent = new Intent(this, SelectContactActivity.class);
+	
+	
     public void gotoselect(View view){
+    	Intent intent = new Intent(this, SelectContactActivity.class);
     	startActivity(intent);
     	
     }

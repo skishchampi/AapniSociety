@@ -35,11 +35,13 @@ public class ParcelableNameValuePair implements NameValuePair, Parcelable{
 		return value1;
 	}
 	
+	@Override
 	public int describeContents() {
 		return 0;
 	}
 
 
+	@Override
 	public void writeToParcel(Parcel out, int flags) {
 		out.writeString(name);
 		out.writeString(value);		
@@ -47,11 +49,13 @@ public class ParcelableNameValuePair implements NameValuePair, Parcelable{
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Parcelable.Creator<ParcelableNameValuePair> CREATOR = new Parcelable.Creator<ParcelableNameValuePair>() {
-        public ParcelableNameValuePair createFromParcel(Parcel in) {
+        @Override
+		public ParcelableNameValuePair createFromParcel(Parcel in) {
             return new ParcelableNameValuePair(in);
         }
 
-        public ParcelableNameValuePair[] newArray(int size) {
+        @Override
+		public ParcelableNameValuePair[] newArray(int size) {
             return new ParcelableNameValuePair[size];
         }
     };

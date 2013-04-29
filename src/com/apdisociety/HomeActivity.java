@@ -6,14 +6,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 	
@@ -75,7 +71,7 @@ public class HomeActivity extends Activity {
 	
 	public void requestService(View view) {
 	
-		Intent intent = new Intent (this, RequestServiceActivity.class);
+		Intent intent = new Intent (this, SelectContactActivity.class);
 		startActivity(intent);
 	}
 	

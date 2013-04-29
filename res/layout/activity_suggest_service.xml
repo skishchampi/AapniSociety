@@ -8,14 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SearchServiceActivity" >
 
-    <RatingBar
-        android:id="@+id/ratingBar1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="26dp" />
-
     <Spinner
         android:id="@+id/spinner1"
         android:layout_width="wrap_content"
@@ -45,5 +37,12 @@
         android:layout_alignRight="@+id/spinner1"
         android:text="Select a Contact"
         android:onClick="gotoselect" />
+
+    <RatingBar
+        android:id="@+id/ratingBar1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

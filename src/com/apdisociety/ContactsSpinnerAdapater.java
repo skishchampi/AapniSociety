@@ -45,18 +45,22 @@ public class ContactsSpinnerAdapater extends BaseAdapter implements
 		this.activity = activity;
 	}
 
+	@Override
 	public int getCount() {
 		return content.size();
 	}
 
+	@Override
 	public SpinnerEntry getItem(int position) {
 		return content.get(position);
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
+	@Override
 	public View getView(int position, View convertView,
 			ViewGroup parent) {
 		final LayoutInflater inflater = activity.getLayoutInflater();	// default layout inflater

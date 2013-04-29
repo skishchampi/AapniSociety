@@ -45,15 +45,19 @@ public class NbhActivity extends Activity {
          // Define a listener that responds to location updates
    LocationListener locationListener = new LocationListener() {
  
-   	public void onLocationChanged(Location location) {
+   	@Override
+	public void onLocationChanged(Location location) {
          // Called when a new location is found by the network location provider.
    		makeUseOfNewLocation(location);
        }
-       public void onStatusChanged(String provider, int status, Bundle extras) {}
+       @Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-       public void onProviderEnabled(String provider) {}
+       @Override
+	public void onProviderEnabled(String provider) {}
 
-       public void onProviderDisabled(String provider) {
+       @Override
+	public void onProviderDisabled(String provider) {
        }
      };
 
@@ -122,7 +126,8 @@ public class NbhActivity extends Activity {
 		   	    {
           	   showDialog(3);
 			       new Thread(new Runnable(){
-			    			public void run(){
+			    			@Override
+							public void run(){
 			    				if(flag==1)
 			    				{    
 			    					dismissDialog(3);
@@ -166,7 +171,8 @@ public class NbhActivity extends Activity {
     };
 	
 	
-	 protected Dialog onCreateDialog(int id) {
+	 @Override
+	protected Dialog onCreateDialog(int id) {
 	     if(id == 3){
 	             ProgressDialog loadingDialog = new ProgressDialog(this);
 	             loadingDialog.setMessage("Fetching Location and keep moving...");

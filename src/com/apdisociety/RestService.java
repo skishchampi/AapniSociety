@@ -108,7 +108,7 @@ public class RestService{
     	    }
 	     };
 	     final Intent intent = new Intent(mContext, ExecuteRequest.class);
-	     intent.putParcelableArrayListExtra("headers", (ArrayList<? extends Parcelable>) headers);
+	     intent.putParcelableArrayListExtra("headers", headers);
 	     intent.putExtra("params", params);
 	     intent.putExtra("url", url);
 	     intent.putExtra("receiver", receiver);
