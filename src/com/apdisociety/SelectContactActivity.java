@@ -129,6 +129,7 @@ public class SelectContactActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+	//asdokoekokeokdoekdoekd
 	private static final String TAG = "SelectContactActivity";
 	private final Handler mHandlerP = new Handler(){
     	@Override
