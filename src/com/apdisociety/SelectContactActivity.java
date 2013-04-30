@@ -89,30 +89,35 @@ public class SelectContactActivity extends Activity {
 
 		});
 
-		/*
-		 * typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-		 * 
-		 * public void onItemSelected(AdapterView<?> parent, View view, int
-		 * position, long id) { //updateList(position); ctype =
-		 * String.valueOf(typeSpinner.getSelectedItem()); }
-		 * 
-		 * public void onNothingSelected(AdapterView<?> parent) {
-		 * //updateList(contactSpinner.getSelectedItemPosition()); }
-		 * 
-		 * /*private void updateList(int position) {
-		 * 
-		 * if(position < adapter.getCount() && position >= 0) {
-		 * 
-		 * SpinnerEntry currentEntry = adapter.getItem(position); //
-		 * contactListView.setAdapter(null); final List<ListViewEntry> content =
-		 * new LinkedList<ListViewEntry>();
-		 * queryAllPhoneNumbersForContact(currentEntry.getContactId(), content);
-		 * queryAllEmailAddressesForContact(currentEntry.getContactId(),
-		 * content); // contactListView.setAdapter(new
-		 * ContactListViewAdapter(content,SelectContactActivity.this)); } }
-		 * 
-		 * });
-		 */
+		
+		 /* typeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		  
+		  public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { 
+		  //updateList(position); 
+		  ctype = String.valueOf(typeSpinner.getSelectedItem()); 
+		  
+		  }
+		  
+		  public void onNothingSelected(AdapterView<?> parent) {
+		 //updateList(typeSpinner.getSelectedItemPosition());
+		 }
+		 /* 
+		 private void updateList(int position) {
+		  
+		  if(position < adapter.getCount() && position >= 0) {
+		  
+		  SpinnerEntry currentEntry = adapter.getItem(position); //
+		  contactListView.setAdapter(null); final List<ListViewEntry> content =
+		  new LinkedList<ListViewEntry>();
+		  queryAllPhoneNumbersForContact(currentEntry.getContactId(), content);
+		  queryAllEmailAddressesForContact(currentEntry.getContactId(),
+		 content); // contactListView.setAdapter(new
+		  ContactListViewAdapter(content,SelectContactActivity.this)); } }
+		  
+		  }  
+		  
+		  }); */
+		 
 		ratingBar = (RatingBar) findViewById(R.id.ratingBar1);	
 		ratingBar.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
 			@Override
@@ -128,15 +133,25 @@ public class SelectContactActivity extends Activity {
 
 		queryAllRawContacts();
 		contactSpinner.setAdapter(adapter);
+		addListenerOnSpinnerItemSelection();
 	}
 
+	
+	public void addListenerOnSpinnerItemSelection() {
+		typeSpinner = (Spinner) findViewById(R.id.spinner1);
+		typeSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+	  }
+	
+	
+	
+	
 	public void suggest(View view) {
 		
 		r = new RestService(mHandlerP, this,
 				"http://jigar-btp.cloudapp.net/suggest_service/",
 				RestService.POST);
 
-		r.addParam("service_name", "maid");
+		r.addParam("service_name", String.valueOf(typeSpinner.getSelectedItem()));
 		r.addParam("sp_name", cname);
 		r.addParam("rating", value);
 		r.addParam("contact", cnum);

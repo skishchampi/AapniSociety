@@ -47,6 +47,13 @@ Log.i(TAG,"asd");
 
 }
 
+@Override
+protected void onStop()
+{
+	super.onStop();
+	timer.cancel();
+}
+
 //***********************************************
 
 

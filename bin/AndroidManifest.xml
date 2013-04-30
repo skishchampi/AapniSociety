@@ -17,7 +17,7 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="10" />
 
     <meta-data
         android:name="com.google.android.maps.v2.API_KEY"
@@ -139,7 +139,8 @@
         <activity
             android:name="com.apdisociety.GossipActivity"
             android:label="@string/title_activity_gossip"
-            android:parentActivityName="com.apdisociety.HomeActivity" >
+            android:parentActivityName="com.apdisociety.HomeActivity"
+             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apdisociety.HomeActivity" />
