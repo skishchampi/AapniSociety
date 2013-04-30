@@ -105,7 +105,7 @@ public class NbhActivity extends Activity {
 		
 		pname = ((EditText)findViewById(R.id.editText1)).getText().toString();
 		ptype = String.valueOf(((Spinner)findViewById(R.id.spinner1)).getSelectedItem());
-		
+		Log.i(pname, ptype);
 		if(pname.length()==0){
 			Toast toast = Toast.makeText(view.getContext(),"Enter Name of place", Toast.LENGTH_SHORT);
     	    toast.show();
@@ -137,12 +137,19 @@ public class NbhActivity extends Activity {
 			    			}).start();
           	   
 		   	    }
+      	 Log.i(pname, ptype);
       	   r.addParam("name", pname);
+      	 Log.i(pname, ptype);
       	 r.addParam("type", ptype);
+      	Log.i(pname, ptype);
       	r.addParam("plat", Double.toString(plat));
+      	Log.i(pname, ptype);
       	r.addParam("plon", Double.toString(plon));
+      	Log.i(pname, ptype);
       	   
       	   try{
+      		 Log.i(pname, ptype);
+      		Log.i(pname, ptype);
       		   r.execute();
       		   
       	   }catch (Exception e){
@@ -152,18 +159,20 @@ public class NbhActivity extends Activity {
 		
 		
 	}
+	public static String[] response;
 	
 	private final Handler mHandler = new Handler(){
     	@Override
     	public void handleMessage(Message msg){
     			//t_query1.setText((String) msg.obj);
     		//Log.i(TAG,((String)msg.obj));
-    		//response = ((String)msg.obj).split("\"");
+    		response = ((String)msg.obj).split("\"");
     		//Log.i(TAG,response[3]);
-    		//if(response[3].equals("1")){
-    		 //   Log.i(TAG, "WHy");	
+    		if(response[3].equals("1")){
+    		  //  Log.i(TAG, "WHy");	
 				//startActivity(intent);
-			//}
+    			(Toast.makeText(getApplicationContext(), "Place Added", Toast.LENGTH_LONG)).show();
+			}
     		
     		
     		

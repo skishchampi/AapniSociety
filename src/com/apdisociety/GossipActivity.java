@@ -108,11 +108,12 @@ Log.i(TAG,"asd");
      if((send.getText().toString()).length() == 0){
     	 (Toast.makeText(getApplicationContext(), "Message Empty", Toast.LENGTH_SHORT)).show();
     }else {
-    	
+          	
     	restServicePostS = new RestService(mHandlerPostS, this, "http://jigar-btp.cloudapp.net/gossip_enter/", RestService.POST);
         restServicePostS.addParam("chat", send.getText().toString());
         try{
         restServicePostS.execute();
+        send.setText("");
         }
         catch (Exception e) {
         e.printStackTrace();
@@ -175,7 +176,7 @@ private final Handler mHandlerPostR = new Handler(){
     }
     public void display(){
      int i=0;
-     for(i=0;i<(array.length) - 1 ;i++){
+     for(i=0;i<array.length ;i++){
     	 Log.i(TAG,array[i]);
     	 if (array[i].contains("\"")){	
     		 String str1="Anon:";
@@ -208,7 +209,7 @@ private final Handler mHandlerPostS = new Handler(){
          int duration = Toast.LENGTH_SHORT;
          Toast toast = Toast.makeText(context, text, duration);
          toast.show();
-         send.setText("");
+//         send.setText("");
          //tv.setText((String) msg.obj);
     
      }
