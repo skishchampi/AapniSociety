@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-//import TimerDemo.RemindTask;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -22,7 +21,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.*;
 
 public class GossipActivity extends Activity {
     
@@ -106,15 +104,21 @@ Log.i(TAG,"asd");
 }
     public void sendGossip(View view){
      send = (EditText) findViewById(R.id.message);
-     restServicePostS = new RestService(mHandlerPostS, this, "http://jigar-btp.cloudapp.net/gossip_enter/", RestService.POST);
-     restServicePostS.addParam("chat", send.getText().toString());
-     try{
-     restServicePostS.execute();
-     }
-     catch (Exception e) {
-     e.printStackTrace();
-     }
+     
+     if((send.getText().toString()).length() == 0){
+    	 (Toast.makeText(getApplicationContext(), "Message Empty", Toast.LENGTH_SHORT)).show();
+    }else {
+    	
+    	restServicePostS = new RestService(mHandlerPostS, this, "http://jigar-btp.cloudapp.net/gossip_enter/", RestService.POST);
+        restServicePostS.addParam("chat", send.getText().toString());
+        try{
+        restServicePostS.execute();
+        }
+        catch (Exception e) {
+        e.printStackTrace();
+        }
     }
+   }
     
 /**
 * Set up the {@link android.app.ActionBar}, if the API is available.
