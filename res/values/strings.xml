@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Apdisociety</string>
+    <string name="app_name">Aapdi Society</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="signin">Sign In</string>
@@ -50,10 +50,10 @@
     <string name="title_activity_search_nbh">SearchNbhActivity</string>
     <string name="title_activity_nbh">NbhActivity</string>
     <string name="title_activity_nbh_select">NbhSelectActivity</string>
-    <string name="title_activity_sign_in">SignInActivity</string>
-    <string name="title_activity_gossip">GossipActivity</string>
-    <string name="title_activity_service_provider">ServiceProviderActivity</string>
-    <string name="title_activity_search_service">SearchServiceActivity</string>
-    <string name="title_activity_select_contact">SelectContactActivity</string>
+    <string name="title_activity_sign_in">Sign In</string>
+    <string name="title_activity_gossip">Gossip</string>
+    <string name="title_activity_service_provider">Service Providers</string>
+    <string name="title_activity_search_service">Search for Services</string>
+    <string name="title_activity_select_contact">Select Contact</string>
 
 </resources>

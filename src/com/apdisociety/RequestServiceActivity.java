@@ -9,12 +9,13 @@ import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Spinner;
 
 public class RequestServiceActivity extends Activity {
 
 	//RestService r;
 	//private static final String TAG = "RequestServiceActivity";
-	//Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+	Spinner spinner = (Spinner) findViewById(R.id.spinner1);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,12 @@ public class RequestServiceActivity extends Activity {
 	}
 	
 	public void sendRequest (View view){
+		
+		String type = String.valueOf(spinner.getSelectedItem());
+		
 		Intent intent = new Intent(this, ServiceProviderActivity.class);
+		Bundle bundle = intent.getExtras();
+		bundle.putString("type",type);
 		startActivity(intent);
 	}
 	

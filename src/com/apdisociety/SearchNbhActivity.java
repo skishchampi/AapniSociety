@@ -23,7 +23,7 @@ public class SearchNbhActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_nbh);
 		// Show the Up button in the action bar.
-		setUpMapIfNeeded();
+	    setUpMapIfNeeded();
 		setupActionBar();
 	}
 
@@ -78,7 +78,7 @@ public class SearchNbhActivity extends FragmentActivity {
 	    @Override
 	    protected void onResume() {
 	        super.onResume();
-	        setUpMapIfNeeded();
+	  //     setUpMapIfNeeded();
 	    }
 	    /**
 	     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
