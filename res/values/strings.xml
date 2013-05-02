@@ -58,5 +58,7 @@
     <string name="title_activity_service_provider">Service Providers</string>
     <string name="title_activity_search_service">Search for Services</string>
     <string name="title_activity_select_contact">Select Contact</string>
+    <string name="title_activity_search_n">Search</string>
+    <string name="title_activity_select_people">Select People </string>
 
 </resources>

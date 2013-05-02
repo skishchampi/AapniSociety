@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#E6E6E6"
+    android:background="@drawable/backgroun11"
     tools:context=".SelectContactActivity"
     >
 
@@ -14,7 +14,7 @@
         android:layout_below="@+id/ratingBar1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="82dp"
-        android:text="Button"
+        android:text="Suggest"
         android:onClick="suggest" />
 
     <Spinner

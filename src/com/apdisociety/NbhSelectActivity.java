@@ -55,7 +55,7 @@ public class NbhSelectActivity extends Activity {
 	}
 
 	public void search(View view){
-		Intent intent = new Intent (this, SearchNbhActivity.class);
+		Intent intent = new Intent (this, SearchNActivity.class);
 		startActivity(intent);
 	}
 	

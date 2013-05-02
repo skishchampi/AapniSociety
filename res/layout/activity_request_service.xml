@@ -6,7 +6,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".RequestServiceActivity" >
+    tools:context=".RequestServiceActivity"
+    android:background="@drawable/backgroun11" >
 
     <RadioGroup
         android:id="@+id/radioGroup1"

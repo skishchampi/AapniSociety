@@ -78,7 +78,7 @@ public class HomeActivity extends Activity {
 	
 	public void requestService(View view) {
 	
-		Intent intent = new Intent (this, RequestServiceActivity.class);
+		Intent intent = new Intent (this, SelectPeopleActivity.class);
 		startActivity(intent);
 	}
 	
