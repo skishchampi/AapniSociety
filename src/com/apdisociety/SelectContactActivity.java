@@ -42,6 +42,7 @@ public class SelectContactActivity extends Activity {
 	private final ContactsSpinnerAdapater adapter = new ContactsSpinnerAdapater(
 			spinnerContent, this);
 	private RatingBar ratingBar;
+	private static final String TAG = "SelectContactActivity";
 	RestService r;
 
 	/** Called when the activity is first created. */
@@ -164,7 +165,8 @@ public class SelectContactActivity extends Activity {
 	}
 
 	// asdokoekokeokdoekdoekd
-	private static final String TAG = "SelectContactActivity";
+	
+	
 	private final Handler mHandlerP = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {

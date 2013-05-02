@@ -6,6 +6,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="signin">Sign In</string>
     <string name="signup">Sign Up</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="rating">Rating</string>
     <string name="title_activity_signup">SignupActivity</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>

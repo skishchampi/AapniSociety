@@ -15,7 +15,7 @@ public class RequestServiceActivity extends Activity {
 
 	//RestService r;
 	//private static final String TAG = "RequestServiceActivity";
-	Spinner spinner = (Spinner) findViewById(R.id.spinner1);
+	Spinner spinner;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,9 @@ public class RequestServiceActivity extends Activity {
 		setContentView(R.layout.activity_request_service);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		addListenerOnSpinnerItemSelection();
+		
+
 	}
 
 	/**
@@ -59,13 +62,17 @@ public class RequestServiceActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	public void addListenerOnSpinnerItemSelection() {
+		spinner = (Spinner) findViewById(R.id.services); 
+		spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+	  }
+	
 	public void sendRequest (View view){
-		
-		String type = String.valueOf(spinner.getSelectedItem());
-		
+		 
+	    
+	    String type = String.valueOf(spinner.getSelectedItem());
 		Intent intent = new Intent(this, ServiceProviderActivity.class);
-		Bundle bundle = intent.getExtras();
-		bundle.putString("type",type);
+		intent.putExtra("type", type);
 		startActivity(intent);
 	}
 	

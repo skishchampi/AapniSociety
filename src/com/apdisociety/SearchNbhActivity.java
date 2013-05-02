@@ -1,10 +1,16 @@
 package com.apdisociety;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,17 +21,44 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 public class SearchNbhActivity extends FragmentActivity {
 	
-	 private GoogleMap mMap;
-
+	private GoogleMap mMap;
+    RestService r; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_nbh);
+		
+		    r= new RestService(mHandlerP, this, "http://jigar-btp.cloudapp.net/request_place/", RestService.POST);
+	        r.addParam("service_name", getIntent().getExtras().getString("type"));
+	        try{
+	        	
+	        	r.execute();
+	        	
+	        	
+	        }catch(Exception e){
+	        	e.printStackTrace();
+	        }
+	        
+		
 		// Show the Up button in the action bar.
 	    setUpMapIfNeeded();
 		setupActionBar();
 	}
+	
+	private final Handler mHandlerP = new Handler(){
+    	@Override
+    	public void handleMessage(Message msg){
+    		Log.e("Jigar",msg.obj.toString());
+    			try {
+					JSONObject j = new JSONObject((String)msg.obj);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					Log.e("JSON Parser", "Error parsing data " + e.toString());
+				}
+    		}	
+    };
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.

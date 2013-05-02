@@ -47,12 +47,18 @@
             </EditText>
 
             <Button
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="66dp"
+                android:text="U"
+                android:onClick="sendGossip2" />
+
+            <Button
                 android:id="@+id/sendMessageButton"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight="0.03"
+                android:layout_height="69dp"
                 android:onClick="sendGossip"
-                android:text="Go" />
+                android:text="A" />
         </LinearLayout>
 
     </LinearLayout>

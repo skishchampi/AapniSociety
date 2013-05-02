@@ -128,6 +128,24 @@ Log.i(TAG,"asd");
     }
    }
     
+    public void sendGossip2(View view){
+        send = (EditText) findViewById(R.id.message);
+        
+        if((send.getText().toString()).length() == 0){
+       	 (Toast.makeText(getApplicationContext(), "Message Empty", Toast.LENGTH_SHORT)).show();
+       }else {
+             	
+       	restServicePostS = new RestService(mHandlerPostS, this, "http://jigar-btp.cloudapp.net/gossip_enter2/", RestService.POST);
+           restServicePostS.addParam("chat", send.getText().toString());
+           try{
+           restServicePostS.execute();
+           send.setText("");
+           }
+           catch (Exception e) {
+           e.printStackTrace();
+           }
+       }
+      }
 /**
 * Set up the {@link android.app.ActionBar}, if the API is available.
 */
@@ -186,8 +204,7 @@ private final Handler mHandlerPostR = new Handler(){
      for(i=0;i<array.length ;i++){
     	 Log.i(TAG,array[i]);
     	 if (array[i].contains("\"")){	
-    		 String str1="Anon:";
-    		 array[i]=str1+array[i].split("\"")[1];	
+    		 array[i]=array[i].split("\"")[1];	
 }
 }
      ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_messages, array);	
