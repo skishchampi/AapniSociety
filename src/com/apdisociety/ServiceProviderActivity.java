@@ -9,18 +9,14 @@ import org.json.JSONObject;
 
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -110,7 +106,7 @@ public class ServiceProviderActivity extends ListActivity {
                  String phone = c.getString(TAG_PHONE);
                  String rating = c.getString(TAG_RATING);
                  
-                  
+                 String message=name+ "\n" +phone + "\n" + rating; 
           
                   
                  // creating new HashMap
@@ -118,7 +114,7 @@ public class ServiceProviderActivity extends ListActivity {
                   
                  // adding each child node to HashMap key => value
                //  map.put(TAG_NAME, name);
-                 map.put(TAG_PHONE, phone);
+                 map.put(TAG_PHONE, message);
                 // map.put(TAG_RATING, rating);
           
   
@@ -148,13 +144,16 @@ public class ServiceProviderActivity extends ListActivity {
                      int position, long id) {
                  // getting values from selected ListItem
          //        String name = ((TextView) view.findViewById(R.id.name)).getText().toString();
-                 String phone = ((TextView) view.findViewById(R.id.phone)).getText().toString();
+                 String phone2 = ((TextView) view.findViewById(R.id.phone)).getText().toString();
+                 String phone1[]=phone2.split("\n");
+                 String phone=phone1[1];
+                 Log.i("phone:",phone);
            //      String rating = ((TextView) view.findViewById(R.id.rating)).getText().toString();
                   
                  String sms = "Help required, Please reach me out asap";
                  
                  try {
-                	if(phone.length() != 10) { 
+                	if(phone.length() == 10 ||phone.length() == 11||phone.length() == 13) { 
           			SmsManager smsManager = SmsManager.getDefault();
           			smsManager.sendTextMessage(phone, null, sms, null, null);
           			Toast.makeText(getApplicationContext(), "SMS Sent!",
