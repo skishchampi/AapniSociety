@@ -7,14 +7,14 @@ Release roadmap: [docs/aapnisociety-roadmap.md](./aapnisociety-roadmap.md)
 
 ## 1. Purpose
 
-AapniSociety is a private, consent-gated trust and mobility platform for tenant households, domestic workers, and support workers in Indian cities.
+AapniSociety is private, consent-gated cooperative infrastructure for domestic workers, support workers, and tenant households in Indian cities.
 
 The system helps users:
 - preserve trusted local knowledge across tenant churn
 - request and offer introductions without public exposure
 - carry worker reputation and references across buildings
 - surface worker-authored city safety knowledge
-- support cooperative governance rather than platform extraction
+- operate under worker-led cooperative governance rather than platform extraction
 
 ## 2. Scope
 
@@ -22,7 +22,7 @@ The conceptual and historical basis for the product is documented in `scope.md`.
 
 ### In Scope
 
-- tenant and worker accounts
+- worker and tenant accounts
 - building membership
 - introduction flows
 - portable references
@@ -30,7 +30,7 @@ The conceptual and historical basis for the product is documented in `scope.md`.
 - service memory
 - city safety notes
 - reporting, moderation, and blocking
-- cooperative admin tools
+- cooperative operator tools
 - privacy controls
 
 ### Out of Scope
@@ -45,15 +45,16 @@ The conceptual and historical basis for the product is documented in `scope.md`.
 
 ## 3. Users and Roles
 
-- Tenant household
-- Long-term tenant
-- Trusted connector
 - Domestic worker
 - Maid / cook / driver / plumber / electrician
 - Support staff
 - Worker cooperative member
+- Worker cooperative operator
+- Tenant household
+- Long-term tenant
+- Trusted connector
 - Moderator
-- Admin / operator
+- System admin
 
 ## 4. Product Overview
 
@@ -77,11 +78,11 @@ The product is organized around four user-visible modules:
    - institutional trust notes
    - worker-authored locality intelligence
 
-4. **Cooperative Governance**
+4. **Cooperative Operations**
    - moderation
    - audit trails
    - policy review
-   - admin tools for the coop or operator
+   - operator tools for the cooperative
 
 ## 5. Functional Requirements
 

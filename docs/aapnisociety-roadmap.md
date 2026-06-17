@@ -56,6 +56,24 @@ Exit criteria:
 - product direction is clear enough to start implementation
 - worker-led cooperative direction is reflected in planning docs
 
+### 0.0.1 - Recovery Baseline
+
+Goal: create a committed documentation baseline that explains the legacy project, the rebuild decision, and the path to `0.1.0`.
+
+Deliverables:
+- README points to canonical docs
+- legacy Android and Django audit exists
+- scope document exists
+- formal SRS exists
+- maintained roadmap exists
+- `0.1.0` target is defined as the Cooperative Trust Pilot
+
+Exit criteria:
+- the old codebase is treated as archival
+- the modern stack direction is documented
+- worker-led cooperative ownership is documented as the product center
+- there is no ambiguity about which document owns scope, requirements, and release planning
+
 ### 0.1.0 - Cooperative Trust Pilot
 
 Goal: prove that a worker-led cooperative can manage trusted household-work introductions, portable references, rate floors, and safety knowledge inside one Ahmedabad pilot cluster.
@@ -444,4 +462,3 @@ Update this file when:
 - implementation exposes a wrong assumption
 
 Do not use this file as a dumping ground. Detailed conceptual material belongs in `aapnisociety-scope.md`. Detailed requirements belong in `aapnisociety-srs-formal.md`. This file should remain the maintained release plan.
-
