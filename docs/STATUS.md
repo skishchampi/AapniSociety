@@ -1,6 +1,6 @@
 # AapniSociety Status
 
-Last recomputed: 2026-06-17T17:04:51-04:00
+Last recomputed: 2026-06-17T17:22:07-04:00
 Branch: `master`
 
 ## Current Gate
@@ -26,7 +26,7 @@ The next gate should produce the first modern implementation scaffold:
 
 | Unit | Count | Evidence |
 |---|---:|---|
-| Markdown docs under `docs/` | 7 | `find docs -maxdepth 2 -type f -name '*.md'` |
+| Markdown docs under `docs/` | 8 | `find docs -maxdepth 2 -type f -name '*.md'` |
 | Release notes | 1 | `docs/releases/0.0.1.md` |
 | Research notes | 1 | `docs/research/technology-coops.md` |
 | Canonical scope docs | 4 | scope, formal SRS, roadmap, legacy audit |
@@ -69,19 +69,18 @@ Product decisions to resolve before `0.1.0-beta.1` remain in the roadmap:
 
 ## Commit Gap
 
-At recompute time after the latest research commit:
+At recompute time after `/maintain` closeout:
 
 - tracked modified files: `0`
-- untracked files: `.DS_Store`, `WORKING.md`
-
-`WORKING.md` is a local session ledger and should be closed by `/maintain`.
+- untracked files: `0`
 
 ## Recent Commits
 
+- `3ee889c` Record session closeout
+- `214cb0b` Add PM cockpit for AapniSociety
 - `ecea059` Add technology cooperative research note
 - `4ede59b` Prepare 0.0.1 recovery baseline
 - `743eedd` Document AapniSociety cooperative roadmap
-- `9314446` Create README.md
 
 ## On Track
 
