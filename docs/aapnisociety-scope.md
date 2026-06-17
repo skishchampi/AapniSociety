@@ -242,6 +242,8 @@ That feedback should be treated as research input, not marketing noise.
 6. The product must not become a marketplace tollbooth.
 7. The product must represent the majority city, not the elite city.
 
+The cooperative technology research is tracked separately in [Technology Cooperatives and Platform Cooperatives](./research/technology-coops.md). The core implication is that AapniSociety should not be only an app controlled by a cooperative shell. The cooperative must control the software roadmap, member data, pricing rules, moderation policy, hosting posture, and future financial rails.
+
 ## 9. What success looks like
 
 The product is conceptually successful if:
