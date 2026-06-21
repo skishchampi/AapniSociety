@@ -5,7 +5,7 @@
 BACKEND := backend
 FRONTEND := frontend
 
-.PHONY: help hooks up down migrate makemigrations seed test lint fmt \
+.PHONY: help hooks up down migrate makemigrations seed test lint fmt install \
         backend-install backend-migrate backend-seed backend-test backend-lint \
         frontend-install frontend-test frontend-lint
 
@@ -50,8 +50,9 @@ frontend-lint: ## Lint frontend
 # ── Aggregate ──────────────────────────────────────────
 migrate: backend-migrate ## Run all migrations
 seed: backend-seed ## Seed all dev data
-test: backend-test ## Run all test suites
-lint: backend-lint ## Lint everything
+test: backend-test frontend-test ## Run all test suites
+lint: backend-lint frontend-lint ## Lint everything
+install: backend-install frontend-install ## Install all deps
 
 up: ## Start the local docker-compose stack
 	docker compose -f infra/docker-compose.yml up --build
