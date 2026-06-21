@@ -41,9 +41,9 @@ class OTPVerifyView(APIView):
         except OTPError as exc:
             return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
+        # primary_role is constrained to SELF_ASSIGNABLE_ROLES by the serializer;
+        # privileged roles can never be granted through this client-facing path.
         role = s.validated_data.get("primary_role") or Role.HOUSEHOLD
-        if role not in Role.values:
-            role = Role.HOUSEHOLD
         defaults = {"primary_role": role}
         if s.validated_data.get("full_name"):
             defaults["full_name"] = s.validated_data["full_name"]

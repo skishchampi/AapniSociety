@@ -1,6 +1,11 @@
 from rest_framework import serializers
 
-from .models import OTPChallenge, User
+from .models import OTPChallenge, Role, User
+
+# Roles a user may self-assign at signup. Privileged roles (connector, moderator,
+# operator, admin) are granted only via Django admin / management commands — never
+# from a client-supplied field.
+SELF_ASSIGNABLE_ROLES = [Role.HOUSEHOLD, Role.WORKER]
 
 
 class OTPRequestSerializer(serializers.Serializer):
@@ -15,7 +20,9 @@ class OTPVerifySerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=20)
     code = serializers.CharField(max_length=12)
     full_name = serializers.CharField(max_length=150, required=False, allow_blank=True)
-    primary_role = serializers.CharField(max_length=20, required=False)
+    primary_role = serializers.ChoiceField(
+        choices=SELF_ASSIGNABLE_ROLES, required=False, default=Role.HOUSEHOLD
+    )
 
 
 class UserSerializer(serializers.ModelSerializer):

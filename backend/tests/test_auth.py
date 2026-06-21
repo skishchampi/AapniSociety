@@ -37,6 +37,23 @@ def test_wrong_code_rejected(api):
     assert r.status_code in (400,)
 
 
+def test_client_cannot_self_assign_privileged_role(api):
+    """A client must not be able to sign up as admin/moderator/operator."""
+    api.post("/api/v1/auth/otp/request/", {"phone": "+919900006666"}, format="json")
+    r = api.post("/api/v1/auth/otp/request/", {"phone": "+919900006666"}, format="json")
+    code = r.json()["dev_code"]
+    r = api.post(
+        "/api/v1/auth/otp/verify/",
+        {"phone": "+919900006666", "code": code, "primary_role": "admin"},
+        format="json",
+    )
+    # Privileged role rejected by the serializer's restricted choices.
+    assert r.status_code == 400, r.content
+    from apps.accounts.models import User
+
+    assert not User.objects.filter(phone="+919900006666").exists()
+
+
 def test_returning_user_logs_in_without_duplicate(api, signin):
     signin(api, "+919900005555", role="worker")
     _, user = signin(api, "+919900005555", role="worker")
