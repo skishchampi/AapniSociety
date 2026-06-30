@@ -65,8 +65,11 @@ async function tryRefresh(): Promise<boolean> {
     body: JSON.stringify({ refresh }),
   })
   if (!res.ok) return false
-  const data = (await res.json()) as { access: string }
-  tokens.setAccess(data.access)
+  const data = (await res.json()) as { access: string; refresh?: string }
+  // ROTATE_REFRESH_TOKENS is on server-side: a rotated refresh is returned and
+  // the old one is blacklisted, so persist it or the next refresh fails.
+  if (data.refresh) tokens.set(data.access, data.refresh)
+  else tokens.setAccess(data.access)
   return true
 }
 

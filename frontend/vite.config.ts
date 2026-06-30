@@ -24,10 +24,15 @@ export default defineConfig({
     }),
   ],
   server: {
+    host: true,
     port: 5173,
     // Dev proxy so the SPA can call the backend without CORS friction.
+    // BACKEND_ORIGIN lets docker-compose point the proxy at the backend service.
     proxy: {
-      '/api': { target: 'http://localhost:8000', changeOrigin: true },
+      '/api': {
+        target: process.env.BACKEND_ORIGIN ?? 'http://localhost:8000',
+        changeOrigin: true,
+      },
     },
   },
   test: {
