@@ -18,7 +18,12 @@ class OTPRequestView(APIView):
     def post(self, request):
         s = OTPRequestSerializer(data=request.data)
         s.is_valid(raise_exception=True)
-        _, code = issue_otp(s.validated_data["phone"], s.validated_data["purpose"])
+        try:
+            _, code = issue_otp(s.validated_data["phone"], s.validated_data["purpose"])
+        except OTPError as exc:
+            return Response(
+                {"detail": str(exc)}, status=status.HTTP_429_TOO_MANY_REQUESTS
+            )
         from django.conf import settings
 
         body = {"detail": "OTP issued."}
@@ -29,7 +34,7 @@ class OTPRequestView(APIView):
 
 class OTPVerifyView(APIView):
     permission_classes = [AllowAny]
-    throttle_scope = "otp"
+    throttle_scope = "otp_verify"
 
     @extend_schema(request=OTPVerifySerializer, responses={200: dict})
     def post(self, request):

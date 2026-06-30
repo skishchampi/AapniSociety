@@ -10,14 +10,20 @@ import environ
 # backend/config/settings/base.py -> backend/
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+# Dev default is >= 32 bytes so HS256 token signing never falls below the RFC 7518
+# minimum. prod.py refuses to boot on this placeholder (see the guard there).
+INSECURE_DEV_SECRET_KEY = "django-insecure-dev-only-key-change-me-in-prod"
+
 env = environ.Env(
     DEBUG=(bool, False),
-    SECRET_KEY=(str, "insecure-dev-key-change-me"),
+    SECRET_KEY=(str, INSECURE_DEV_SECRET_KEY),
     ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1"]),
     CORS_ALLOWED_ORIGINS=(list, ["http://localhost:5173", "http://127.0.0.1:5173"]),
     DATABASE_URL=(str, f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
     OTP_TTL_SECONDS=(int, 300),
     OTP_MAX_ATTEMPTS=(int, 5),
+    OTP_MAX_ISSUES_PER_WINDOW=(int, 5),
+    OTP_ISSUE_WINDOW_SECONDS=(int, 3600),
 )
 
 # Load .env if present (local dev). In containers/CI, real env vars win.
@@ -104,7 +110,11 @@ REST_FRAMEWORK = {
         "rest_framework.throttling.ScopedRateThrottle",
     ),
     "DEFAULT_THROTTLE_RATES": {
+        # Issuing and verifying are throttled on separate IP buckets so verify
+        # attempts cannot drain the issue budget (and vice versa). Per-phone
+        # limits live in apps.accounts.otp, independent of these IP buckets.
         "otp": "10/hour",
+        "otp_verify": "20/hour",
     },
 }
 
@@ -115,6 +125,8 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
     "USER_ID_FIELD": "id",
     "USER_ID_CLAIM": "user_id",
+    # HS256 over SECRET_KEY; prod.py guarantees that key is >= 32 bytes.
+    "SIGNING_KEY": SECRET_KEY,
 }
 
 SPECTACULAR_SETTINGS = {
@@ -129,3 +141,7 @@ CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
 # ── Auth / OTP (dev) ───────────────────────────────────
 OTP_TTL_SECONDS = env("OTP_TTL_SECONDS")
 OTP_MAX_ATTEMPTS = env("OTP_MAX_ATTEMPTS")
+# Cap how often one phone can mint a fresh code, so the per-challenge attempt cap
+# cannot be reset at will by re-requesting (brute-force backstop, SRS §6.2).
+OTP_MAX_ISSUES_PER_WINDOW = env("OTP_MAX_ISSUES_PER_WINDOW")
+OTP_ISSUE_WINDOW_SECONDS = env("OTP_ISSUE_WINDOW_SECONDS")

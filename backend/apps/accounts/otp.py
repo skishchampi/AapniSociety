@@ -9,6 +9,7 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.auth.hashers import check_password, make_password
+from django.db import transaction
 from django.utils import timezone
 
 from .models import OTPChallenge
@@ -18,28 +19,41 @@ logger = logging.getLogger("apps.accounts.otp")
 CODE_LENGTH = 6
 
 
+class OTPError(Exception):
+    pass
+
+
 def generate_code() -> str:
     return f"{secrets.randbelow(10**CODE_LENGTH):0{CODE_LENGTH}d}"
 
 
 def issue_otp(phone: str, purpose: str = OTPChallenge.Purpose.LOGIN) -> tuple[OTPChallenge, str]:
-    """Create a fresh challenge for ``phone``, invalidating any prior open ones."""
-    OTPChallenge.objects.filter(phone=phone, consumed_at__isnull=True).update(
-        consumed_at=timezone.now()
-    )
+    """Create a fresh challenge for ``phone``, invalidating any prior open ones.
+
+    Issuance is capped per phone per window so the per-challenge attempt cap cannot
+    be reset at will by re-requesting (brute-force backstop, SRS §6.2).
+    """
+    window_start = timezone.now() - timedelta(seconds=settings.OTP_ISSUE_WINDOW_SECONDS)
+    recent = OTPChallenge.objects.filter(phone=phone, created_at__gte=window_start).count()
+    if recent >= settings.OTP_MAX_ISSUES_PER_WINDOW:
+        raise OTPError("Too many code requests for this number. Try again later.")
+
     code = generate_code()
-    challenge = OTPChallenge.objects.create(
-        phone=phone,
-        code_hash=make_password(code),
-        purpose=purpose,
-        expires_at=timezone.now() + timedelta(seconds=settings.OTP_TTL_SECONDS),
-    )
-    logger.info("OTP issued phone=%s purpose=%s code=%s (dev only)", phone, purpose, code)
+    with transaction.atomic():
+        OTPChallenge.objects.filter(phone=phone, consumed_at__isnull=True).update(
+            consumed_at=timezone.now()
+        )
+        challenge = OTPChallenge.objects.create(
+            phone=phone,
+            code_hash=make_password(code),
+            purpose=purpose,
+            expires_at=timezone.now() + timedelta(seconds=settings.OTP_TTL_SECONDS),
+        )
+    if settings.DEBUG:
+        logger.info("OTP issued phone=%s purpose=%s code=%s (dev only)", phone, purpose, code)
+    else:
+        logger.info("OTP issued phone=%s purpose=%s", phone, purpose)
     return challenge, code
-
-
-class OTPError(Exception):
-    pass
 
 
 def verify_otp(phone: str, code: str) -> OTPChallenge:
