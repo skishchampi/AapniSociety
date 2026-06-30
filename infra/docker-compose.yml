@@ -1,0 +1,54 @@
+# AapniSociety local dev stack. `make up` / `make down` drive this file.
+# Copy infra/.env.example -> infra/.env to override the defaults below.
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-aapni}
+      POSTGRES_USER: ${POSTGRES_USER:-aapni}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-aapni}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-aapni}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    # Declared now for later milestones (caching, OTP/rate-limit backend); not yet used.
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../infra/backend.Dockerfile
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings.dev
+      SECRET_KEY: ${SECRET_KEY:-django-insecure-dev-only-key-change-me-in-prod}
+      DATABASE_URL: postgis://${POSTGRES_USER:-aapni}:${POSTGRES_PASSWORD:-aapni}@db:5432/${POSTGRES_DB:-aapni}
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../infra/frontend.Dockerfile
+    environment:
+      BACKEND_ORIGIN: http://backend:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata: {}
