@@ -39,3 +39,13 @@ legacy/android/local.properties
 *.ap_
 *.dex
 *.class
+
+# Added by ggshield
+.cache_ggshield
+
+# Agent coordination files — local-only by org convention, never committed
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+CONTEXT.md
+WORKING.md
