@@ -4,6 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/context'
 import { Dashboard } from './routes/Dashboard'
+import { Introductions } from './routes/Introductions'
 import { Membership } from './routes/Membership'
 import { Moderation } from './routes/Moderation'
 import { Needs } from './routes/Needs'
@@ -56,6 +57,14 @@ export default function App() {
               element={
                 <RequireAuth>
                   <Needs />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/introductions"
+              element={
+                <RequireAuth>
+                  <Introductions />
                 </RequireAuth>
               }
             />
