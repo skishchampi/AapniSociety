@@ -2,10 +2,17 @@ from django.urls import path
 
 from .views import (
     HouseholdProfileMeView,
+    IntroductionCreateView,
+    IntroductionDecideView,
+    IntroductionEventsView,
+    IntroductionRouteView,
+    IntroductionWithdrawView,
     MembershipQueueView,
     MembershipRequestCreateView,
     MembershipReviewView,
+    MyIntroductionsView,
     MyMembershipRequestsView,
+    RevealContactView,
     ServiceCategoryListView,
     ServiceNeedDetailView,
     ServiceNeedListCreateView,
@@ -34,4 +41,46 @@ urlpatterns = [
     ),
     path("needs/", ServiceNeedListCreateView.as_view(), name="service-needs"),
     path("needs/<int:pk>/", ServiceNeedDetailView.as_view(), name="service-need-detail"),
+    path(
+        "introductions/",
+        IntroductionCreateView.as_view(),
+        name="introduction-create",
+    ),
+    path(
+        "introductions/mine/",
+        MyIntroductionsView.as_view(),
+        name="introductions-mine",
+    ),
+    path(
+        "introductions/<int:pk>/withdraw/",
+        IntroductionWithdrawView.as_view(),
+        name="introduction-withdraw",
+    ),
+    path(
+        "introductions/<int:pk>/accept/",
+        IntroductionDecideView.as_view(),
+        {"action": "accept"},
+        name="introduction-accept",
+    ),
+    path(
+        "introductions/<int:pk>/decline/",
+        IntroductionDecideView.as_view(),
+        {"action": "decline"},
+        name="introduction-decline",
+    ),
+    path(
+        "introductions/<int:pk>/reveal-contact/",
+        RevealContactView.as_view(),
+        name="introduction-reveal",
+    ),
+    path(
+        "introductions/<int:pk>/events/",
+        IntroductionEventsView.as_view(),
+        name="introduction-events",
+    ),
+    path(
+        "moderation/introductions/<int:pk>/route/",
+        IntroductionRouteView.as_view(),
+        name="introduction-route",
+    ),
 ]

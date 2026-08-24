@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from .models import (
     HouseholdProfile,
+    IntroductionEvent,
+    IntroductionRequest,
     MembershipRequest,
     ServiceCategory,
     ServiceNeed,
@@ -40,3 +42,35 @@ class ServiceNeedAdmin(admin.ModelAdmin):
     list_display = ["title", "household", "category", "locality", "status"]
     list_filter = ["status"]
     search_fields = ["title", "household__display_name"]
+
+
+@admin.register(IntroductionRequest)
+class IntroductionRequestAdmin(admin.ModelAdmin):
+    list_display = ["id", "household", "worker", "category", "status", "routed_by"]
+    list_filter = ["status"]
+    search_fields = ["household__display_name", "worker__display_name"]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(IntroductionEvent)
+class IntroductionEventAdmin(admin.ModelAdmin):
+    list_display = ["introduction", "what", "actor", "created_at"]
+    list_filter = ["what"]
+    readonly_fields = ["introduction", "actor", "what", "detail", "created_at"]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False

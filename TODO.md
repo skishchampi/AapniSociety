@@ -1,9 +1,8 @@
 # Current
 
-- Aakash: review, then push and merge the PR that records alpha.2 Met (release
-  notes, roadmap flip) plus the alpha.3 plan.
-- After that merge: start alpha.3 build per docs/plans/0.1.0-alpha.3-introductions.md —
-  models and APIs first, then pages.
+- Aakash: review, then push and merge the next PR (alpha.3 backend slice).
+- Alpha.3 remaining: frontend pages for filing, routing, accept/decline, and
+  the events trail.
 - Keep worker-led cooperative governance as the product center.
 
 # Future
