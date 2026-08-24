@@ -1,14 +1,14 @@
 # Current
 
-- PR #2 merged into master as c14904e on 2026-08-24. Alpha.2 continues on `reboot-13years-later`.
-- Finish `0.1.0-alpha.2`: frontend onboarding forms (worker profile, household profile,
-  membership request, service need) and a moderator queue view or an admin-only stopgap.
+- Aakash: review, then push and merge the PR that records alpha.2 Met (release
+  notes, roadmap flip) plus the alpha.3 plan.
+- After that merge: start alpha.3 build per docs/plans/0.1.0-alpha.3-introductions.md —
+  models and APIs first, then pages.
 - Keep worker-led cooperative governance as the product center.
 
 # Future
 
-- `0.1.0-alpha.3 - Introductions` per the roadmap: introduction requests, review queue,
-  worker accept/reject, contact-reveal consent, auditable history.
+- `0.1.0-alpha.4 - References and Bargaining` per the roadmap after alpha.3.
 - Deferred (non-blocking) audit medium findings: Idempotency-Key on POST writes (SRS §7.4);
   cumulative per-phone failed-verify lockout beyond the issuance cap.
 - Refresh app-store competitor data before external pitch/deck use.
@@ -24,9 +24,9 @@
   requirements.
 - Recomputed the PM cockpit into local-only notes/STATUS.md; docs/STATUS.md stays a durable
   public snapshot.
-- Recorded alpha.1 as Met after Aakash's go for alpha.2.
-- Started alpha.2 per roadmap numbering: MembershipRequest approval workflow, ServiceNeed CRUD,
-  privacy-exposure tests. Backend pytest 22/22, ruff clean.
+- Recorded alpha.1 Met; built and merged all of 0.1.0-alpha.2 across PRs #2, #3, #4
+  (membership approval, service needs, profile editors, moderator review).
+- Aakash called the alpha.2 gate Met. Release notes written; alpha.3 plan opened.
 
 ## 2026-06-24
 
