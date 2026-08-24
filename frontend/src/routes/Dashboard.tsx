@@ -27,6 +27,16 @@ export function Dashboard() {
             : 'incomplete'}
         </dd>
       </dl>
+      <nav>
+        <a href="/profile">Profile</a> · <a href="/membership">Membership</a> ·{' '}
+        <a href="/needs">Needs</a>
+        {['moderator', 'operator', 'admin'].includes(user.primary_role) && (
+          <>
+            {' '}
+            · <a href="/moderation">Moderation</a>
+          </>
+        )}
+      </nav>
       <p className="muted">
         Foundations build (0.1.0-alpha.1). Introductions, references, rate floors, and
         safety notes arrive in later milestones.

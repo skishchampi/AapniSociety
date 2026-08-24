@@ -131,9 +131,79 @@ export const authApi = {
   me: () => api<User>('/me/'),
 }
 
+export interface WorkerProfile {
+  id: number
+  display_name: string
+  languages: string[]
+  service_categories: number[]
+  localities_served: number[]
+  availability: Record<string, unknown>
+  default_rate_floor: string | null
+  contact_visibility: 'private' | 'coop'
+  created_at: string
+  updated_at: string
+}
+
+export interface HouseholdProfile {
+  id: number
+  display_name: string
+  building: number | null
+  unit: number | null
+  discoverable_to_coop: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface ServiceCategory {
+  id: number
+  key: string
+  label: string
+  is_active: boolean
+}
+
+export interface MembershipRequest {
+  id: number
+  role_sought: 'worker' | 'household'
+  status: 'pending' | 'approved' | 'rejected'
+  rejection_reason: string
+  created_at: string
+  reviewed_at: string | null
+}
+
+export interface ServiceNeed {
+  id: number
+  household: number
+  category: number
+  title: string
+  details: string
+  locality: number | null
+  status: 'open' | 'matched' | 'closed'
+  created_at: string
+  updated_at: string
+}
+
 export const profileApi = {
-  upsertWorker: (data: Record<string, unknown>) =>
-    api('/me/worker-profile/', { method: 'PUT', body: data }),
-  upsertHousehold: (data: Record<string, unknown>) =>
-    api('/me/household-profile/', { method: 'PUT', body: data }),
+  getWorker: () => api<WorkerProfile>('/me/worker-profile/'),
+  getHousehold: () => api<HouseholdProfile>('/me/household-profile/'),
+  // PATCH, not PUT: a full PUT would reset fields the caller left out.
+  updateWorker: (data: Partial<WorkerProfile>) =>
+    api<WorkerProfile>('/me/worker-profile/', { method: 'PATCH', body: data }),
+  updateHousehold: (data: Partial<HouseholdProfile>) =>
+    api<HouseholdProfile>('/me/household-profile/', { method: 'PATCH', body: data }),
+}
+
+export const membersApi = {
+  categories: () => api<ServiceCategory[]>('/service-categories/', { auth: false }),
+  myMembershipRequests: () => api<MembershipRequest[]>('/membership/requests/mine/'),
+  requestMembership: (role_sought: 'worker' | 'household') =>
+    api<MembershipRequest>('/membership/request/', { method: 'POST', body: { role_sought } }),
+  membershipQueue: () => api<MembershipRequest[]>('/membership/queue/'),
+  reviewMembership: (id: number, action: 'approve' | 'reject', reason = '') =>
+    api<MembershipRequest>(`/membership/requests/${id}/review/`, {
+      method: 'POST',
+      body: { action, reason },
+    }),
+  needs: () => api<ServiceNeed[]>('/needs/'),
+  createNeed: (data: { category: number; title: string; details?: string }) =>
+    api<ServiceNeed>('/needs/', { method: 'POST', body: data }),
 }

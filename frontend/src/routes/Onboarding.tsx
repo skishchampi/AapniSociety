@@ -18,9 +18,9 @@ export function Onboarding() {
     setBusy(true)
     try {
       if (isWorker) {
-        await profileApi.upsertWorker({ display_name: displayName })
+        await profileApi.updateWorker({ display_name: displayName })
       } else {
-        await profileApi.upsertHousehold({ display_name: displayName })
+        await profileApi.updateHousehold({ display_name: displayName })
       }
       await refreshUser()
       navigate('/')
