@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# AapniSociety pre-commit hook.
+# Blocks: committed secrets/.env files, large data blobs, obvious private keys.
+# Install with: make hooks
+
+set -euo pipefail
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$staged" ] && exit 0
+
+fail=0
+
+# 1. Never commit real env files (only *.env.example allowed).
+while IFS= read -r f; do
+  case "$f" in
+    *.env.example|.env.example) ;;
+    *.env|.env) echo "BLOCKED: env file staged: $f"; fail=1 ;;
+  esac
+done <<< "$staged"
+
+# 2. Private key material.
+if git diff --cached -U0 | grep -qE 'BEGIN (RSA|EC|OPENSSH|PGP) PRIVATE KEY'; then
+  echo "BLOCKED: private key material in staged diff"
+  fail=1
+fi
+
+# 3. Large blobs (>2MB) — keep data out of git.
+while IFS= read -r f; do
+  [ -f "$f" ] || continue
+  size=$(wc -c < "$f" | tr -d ' ')
+  if [ "$size" -gt 2097152 ]; then
+    echo "BLOCKED: $f is $((size/1024))KB (>2MB). Keep large/data files out of git."
+    fail=1
+  fi
+done <<< "$staged"
+
+if [ "$fail" -ne 0 ]; then
+  echo "pre-commit checks failed. Fix the above or use 'git commit --no-verify' if you are certain."
+  exit 1
+fi
+exit 0
