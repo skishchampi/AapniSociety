@@ -1,7 +1,14 @@
 import { useEffect, useState } from 'react'
-import { ApiError, membersApi, profileApi } from '../api/client'
-import type { ServiceCategory, WorkerProfile, HouseholdProfile } from '../api/client'
+import { ApiError, geoApi, membersApi, profileApi } from '../api/client'
+import type {
+  HouseholdProfile,
+  Locality,
+  ServiceCategory,
+  WorkerProfile,
+} from '../api/client'
 import { useAuth } from '../auth/context'
+
+const DAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const
 
 function message(err: unknown, fallback: string): string {
   return err instanceof ApiError ? err.message : fallback
@@ -10,22 +17,45 @@ function message(err: unknown, fallback: string): string {
 function WorkerFields({
   initial,
   categories,
+  localities,
 }: {
   initial: WorkerProfile
   categories: ServiceCategory[]
+  localities: Locality[]
 }) {
   const [displayName, setDisplayName] = useState(initial.display_name)
   const [languages, setLanguages] = useState(initial.languages.join(', '))
   const [rateFloor, setRateFloor] = useState(initial.default_rate_floor ?? '')
   const [categoryIds, setCategoryIds] = useState<number[]>(initial.service_categories)
+  const [localityIds, setLocalityIds] = useState<number[]>(initial.localities_served)
+  const [availabilityText, setAvailabilityText] = useState<Record<string, string>>(() => {
+    const text: Record<string, string> = {}
+    for (const day of DAYS) {
+      const windows = initial.availability[day]
+      if (Array.isArray(windows) && windows.length > 0) {
+        text[day] = windows.join(', ')
+      }
+    }
+    return text
+  })
   const [error, setError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
   const [busy, setBusy] = useState(false)
 
-  function toggleCategory(id: number) {
-    setCategoryIds((prev) =>
-      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
-    )
+  function toggle(list: number[], id: number, set: (next: number[]) => void) {
+    set(list.includes(id) ? list.filter((x) => x !== id) : [...list, id])
+  }
+
+  function parseAvailability(): Record<string, string[]> {
+    const availability: Record<string, string[]> = {}
+    for (const day of DAYS) {
+      const windows = (availabilityText[day] ?? '')
+        .split(',')
+        .map((w) => w.trim())
+        .filter(Boolean)
+      if (windows.length > 0) availability[day] = windows
+    }
+    return availability
   }
 
   async function submit(e: React.FormEvent) {
@@ -42,6 +72,8 @@ function WorkerFields({
           .filter(Boolean),
         default_rate_floor: rateFloor === '' ? null : rateFloor,
         service_categories: categoryIds,
+        localities_served: localityIds,
+        availability: parseAvailability(),
       })
       setSaved(true)
     } catch (err) {
@@ -77,12 +109,44 @@ function WorkerFields({
             <input
               type="checkbox"
               checked={categoryIds.includes(cat.id)}
-              onChange={() => toggleCategory(cat.id)}
+              onChange={() => toggle(categoryIds, cat.id, setCategoryIds)}
             />
             {cat.label}
           </label>
         ))}
         {categories.length === 0 && <p className="muted">No categories yet.</p>}
+      </fieldset>
+      <fieldset>
+        <legend>Localities you serve</legend>
+        {localities.map((loc) => (
+          <label key={loc.id}>
+            <input
+              type="checkbox"
+              checked={localityIds.includes(loc.id)}
+              onChange={() => toggle(localityIds, loc.id, setLocalityIds)}
+            />
+            {loc.name}
+          </label>
+        ))}
+        {localities.length === 0 && <p className="muted">No localities yet.</p>}
+      </fieldset>
+      <fieldset>
+        <legend>Weekly availability</legend>
+        <p className="muted">
+          One window per line item, comma separated, like 09:00-13:00.
+        </p>
+        {DAYS.map((day) => (
+          <label key={day}>
+            {day}
+            <input
+              value={availabilityText[day] ?? ''}
+              onChange={(e) =>
+                setAvailabilityText((prev) => ({ ...prev, [day]: e.target.value }))
+              }
+              placeholder="09:00-13:00, 16:00-20:00"
+            />
+          </label>
+        ))}
       </fieldset>
       <label>
         Rate floor (₹ per month)
@@ -158,15 +222,17 @@ function HouseholdFields({ initial }: { initial: HouseholdProfile }) {
 function WorkerSection() {
   const [initial, setInitial] = useState<WorkerProfile | null>(null)
   const [categories, setCategories] = useState<ServiceCategory[]>([])
+  const [localities, setLocalities] = useState<Locality[]>([])
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let alive = true
-    Promise.all([profileApi.getWorker(), membersApi.categories()])
-      .then(([profile, cats]) => {
+    Promise.all([profileApi.getWorker(), membersApi.categories(), geoApi.localities()])
+      .then(([profile, cats, locs]) => {
         if (!alive) return
         setInitial(profile)
         setCategories(cats.filter((c) => c.is_active))
+        setLocalities(locs)
       })
       .catch((err) => {
         if (alive) setError(message(err, 'Could not load your profile.'))
@@ -178,7 +244,7 @@ function WorkerSection() {
 
   if (error) return <p className="error">{error}</p>
   if (!initial) return <p className="muted">Loading…</p>
-  return <WorkerFields initial={initial} categories={categories} />
+  return <WorkerFields initial={initial} categories={categories} localities={localities} />
 }
 
 function HouseholdSection() {

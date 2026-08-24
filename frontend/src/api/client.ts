@@ -207,3 +207,14 @@ export const membersApi = {
   createNeed: (data: { category: number; title: string; details?: string }) =>
     api<ServiceNeed>('/needs/', { method: 'POST', body: data }),
 }
+
+export interface Locality {
+  id: number
+  name: string
+  slug: string
+  city: number
+}
+
+export const geoApi = {
+  localities: () => api<Locality[]>('/localities/', { auth: false }),
+}
