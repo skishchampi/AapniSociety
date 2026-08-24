@@ -1,7 +1,7 @@
 # AapniSociety Software Requirements Specification
 
 Date: 2026-06-17
-Status: Draft
+Status: Active
 Reference scope: [docs/aapnisociety-scope.md](./aapnisociety-scope.md)
 Release roadmap: [docs/aapnisociety-roadmap.md](./aapnisociety-roadmap.md)
 

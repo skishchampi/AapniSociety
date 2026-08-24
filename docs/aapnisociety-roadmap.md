@@ -1,7 +1,7 @@
 # AapniSociety Roadmap
 
 Date: 2026-06-17
-Status: Draft
+Status: Maintained
 Maintainer: AapniSociety project
 
 Reference documents:
@@ -40,7 +40,7 @@ Households are users, but workers and the cooperative are the center of gravity.
 
 Goal: understand the 2012 codebase, recover the project intent, and document the modern product direction.
 
-Status: in progress.
+Status: complete.
 
 Deliverables:
 - legacy Android client reviewed

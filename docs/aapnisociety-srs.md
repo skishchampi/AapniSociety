@@ -1,7 +1,7 @@
 # AapniSociety SRS
 
 Date: 2026-06-17  
-Status: Draft
+Status: Superseded draft — the formal SRS (aapnisociety-srs-formal.md) owns requirements.
 
 ## 1. Purpose
 
@@ -19,7 +19,7 @@ This is not a society-management suite, not a public directory, and not a rating
 
 Urban Indian housing is high-churn and trust-fragmented.
 
-This product sits in Kalyan Sanyal's "need economy": the part of postcolonial capitalism where people are not neatly absorbed into stable wage labor, but still have to reproduce life through informal work, care labor, tenant mobility, and negotiated access to housing and services. In that world, the app should help people meet needs, bargain better, and move without losing dignity.
+This product sits in Kalyan Sanyal's "need economy". That is the part of postcolonial capitalism where people sit outside stable wage labor. They still reproduce life through informal work, care labor, tenant mobility, and negotiated access to housing and services. In that world, the app should help people meet needs, bargain better, and move without losing dignity.
 
 Common problems:
 - new tenants do not know whom to trust for maids, cooks, drivers, plumbers, electricians, doctors, or local eateries

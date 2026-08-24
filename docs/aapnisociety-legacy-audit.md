@@ -1,15 +1,15 @@
 # AapniSociety Legacy Audit
 
 Date: 2026-06-17
-Status: Draft
+Status: Complete
 
 Related repos:
 - Android client: `skishchampi/AapniSociety`
-- Django server: `skishchampi/django-btp`, cloned locally at `/Users/aakash/Developer/CommonerLLP/django-btp`
+- Django server: `skishchampi/django-btp` (clone locally under the CommonerLLP workspace)
 
 ## 1. Summary
 
-The legacy AapniSociety codebase is a 2012-era Android and Django prototype for crowdsourcing and geotagging community resources such as maids, cooks, doctors, local shops, laundry, groceries, and other neighborhood services.
+The legacy AapniSociety codebase is a 2012-era Android and Django prototype. It crowdsourced and geotagged neighborhood resources: maids, cooks, doctors, local shops, laundry, groceries, and other services.
 
 The Android client contains the richer product intent. The Django server repo is much thinner and only has one route wired in the checked-in code.
 
@@ -93,7 +93,7 @@ The Android client calls hardcoded HTTP endpoints under `http://jigar-btp.clouda
 - `/gossip_enter/`
 - `/gossip_enter2/`
 
-The server repo currently wires only `/register/`, so the deployed server that once backed the Android app was ahead of the checked-in Django code or lived elsewhere.
+The checked-in server repo wires only `/register/`. The server that once backed the Android app was therefore ahead of this code, or it lived elsewhere.
 
 ### 2.5 Data Collected by the Client
 
@@ -107,7 +107,7 @@ The client touches sensitive surfaces:
 - gossip/chat content
 - login credentials stored in shared preferences
 
-This is important for the rebuild: the original app solved a trust problem by using contacts and social proximity, but a 2026 rebuild must not repeat the same privacy pattern.
+This matters for the rebuild. The original app solved a trust problem through contacts and social proximity. A 2026 rebuild must not repeat that privacy pattern.
 
 ### 2.6 Security and Privacy Findings
 
