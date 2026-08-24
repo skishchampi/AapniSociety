@@ -1,6 +1,6 @@
 ---
 repo: aapnisociety
-cockpit: docs/STATUS.md
+cockpit: notes/STATUS.md
 roadmap: docs/aapnisociety-roadmap.md
 unit_of_progress: recovery and rebuild-planning artifacts for the AapniSociety cooperative PWA
 ---

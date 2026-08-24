@@ -1,29 +1,37 @@
 # State of Brain
 
-Date: 2026-06-17
+Date: 2026-06-24
 
 ## Active Frame
 
-AapniSociety is now framed as cooperative technology infrastructure for the Indian urban need economy.
+AapniSociety is worker-led, worker-owned cooperative technology infrastructure for the Indian
+urban need economy — not a society/RWA app or services marketplace. The worker is the first-class
+subject of the data model. Households participate but do not control worker visibility, rates, or
+discipline. This session's anti-caste schema audit confirmed the schema holds that line: zero
+caste/religion/marital/relationship fields, and `WorkerProfile` is not subordinate to
+`HouseholdProfile`.
 
-The product is not a society app, RWA tool, or services marketplace. It is a worker-led trust, portability, bargaining, and safety layer for domestic/support workers and tenant households.
+## This Session's Engineering Posture
 
-## Key Conceptual Commitments
-
-- Workers and the cooperative are the center of gravity.
-- Tenants and households participate, but do not control worker visibility, rates, or discipline.
-- Trust transfer should be consent-gated and mediated, not public rating-driven.
-- Rate floors, references, abuse reports, and safety notes are product primitives.
-- The technology stack includes governance, data, hosting, finance rails, moderation, and member education, not only React/Django/Postgres.
-- Bharat Taxi is a cautionary watch case: cooperative branding is insufficient without worker control over board, pricing, data, discipline, and surplus.
+- The scaffold (Phases 0–2) was already functional; the real work was Phase 3–4 completion plus
+  security hardening surfaced by audit. The product is now "off the ground": both halves run,
+  tests pass, the local stack and CI exist.
+- Security treated as foundational, not deferred: OTP brute-force backstop, a JWT key floor that
+  fails prod boot on a weak key, and a refresh-rotation fix. These are alpha-appropriate. Full
+  SMS gateway, httponly-cookie hardening, and idempotency keys remain explicitly later-milestone.
 
 ## Unresolved Tensions
 
-- Whether the tech team itself becomes a worker-owned tech co-op or remains CommonerLLP as steward/contractor accountable to a worker co-op.
+- Whether the tech team becomes a worker-owned tech co-op or stays CommonerLLP as steward.
 - Which legal form best protects worker control in India.
-- How much governance surface must ship in `0.1.0` versus wait for `0.2.0`.
-- How to prevent NGO, RWA, state, or founder capture while still getting pilot funding and operational support.
+- How much governance surface ships in `0.1.0` vs `0.2.0`.
+- Preventing NGO/RWA/state/founder capture while still securing pilot funding/support.
+- (New, operational) The ultracode workflow's implement/verify phases are vulnerable to API
+  session limits. For large self-contained builds, prefer main-loop execution or resumable
+  workflows. Avoid a single long fan-out.
 
 ## Next Thinking Task
 
-Turn `0.1.0-alpha.1` into an implementation plan that starts with membership, roles, profiles, localities, and admin approval before any marketplace or automated matching.
+Aakash commits alpha.1 and calls the gate. Then design the next gate per the roadmap:
+`0.1.0-alpha.2` Membership and Profiles. Keep trust transfer consent-gated and mediated.
+Do not use public rating-driven mechanics.
