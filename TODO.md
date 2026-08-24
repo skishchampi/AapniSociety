@@ -1,7 +1,6 @@
 # Current
 
-- Aakash: review, then push `reboot-13years-later` and merge PR #2. The branch now carries the
-  0.0.x cleanup, the June coordination sync, and the alpha.2 membership + needs slice.
+- PR #2 merged into master as c14904e on 2026-08-24. Alpha.2 continues on `reboot-13years-later`.
 - Finish `0.1.0-alpha.2`: frontend onboarding forms (worker profile, household profile,
   membership request, service need) and a moderator queue view or an admin-only stopgap.
 - Keep worker-led cooperative governance as the product center.

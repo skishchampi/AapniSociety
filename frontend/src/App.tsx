@@ -4,7 +4,11 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/context'
 import { Dashboard } from './routes/Dashboard'
+import { Membership } from './routes/Membership'
+import { Moderation } from './routes/Moderation'
+import { Needs } from './routes/Needs'
 import { Onboarding } from './routes/Onboarding'
+import { Profile } from './routes/Profile'
 import { SignIn } from './routes/SignIn'
 
 const queryClient = new QueryClient()
@@ -28,6 +32,38 @@ export default function App() {
               element={
                 <RequireAuth>
                   <Onboarding />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <RequireAuth>
+                  <Profile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/membership"
+              element={
+                <RequireAuth>
+                  <Membership />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/needs"
+              element={
+                <RequireAuth>
+                  <Needs />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/moderation"
+              element={
+                <RequireAuth>
+                  <Moderation />
                 </RequireAuth>
               }
             />
