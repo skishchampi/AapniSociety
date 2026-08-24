@@ -218,3 +218,47 @@ export interface Locality {
 export const geoApi = {
   localities: () => api<Locality[]>('/localities/', { auth: false }),
 }
+
+export interface Introduction {
+  id: number
+  status: 'requested' | 'routed' | 'accepted' | 'declined' | 'withdrawn'
+  category: number | null
+  worker: number
+  household: number
+  worker_name: string
+  household_name: string
+  note: string
+  created_at: string
+}
+
+export interface IntroductionEvent {
+  id: number
+  what: string
+  detail: string
+  created_at: string
+}
+
+export const introductionsApi = {
+  create: (data: { worker: number; note?: string }) =>
+    api<Introduction>('/introductions/', { method: 'POST', body: data }),
+  mine: () => api<Introduction[]>('/introductions/mine/'),
+  route: (id: number) =>
+    api<{ id: number; status: string }>(
+      `/moderation/introductions/${id}/route/`,
+      { method: 'POST' },
+    ),
+  decide: (id: number, action: 'accept' | 'decline') =>
+    api<{ id: number; status: string }>(`/introductions/${id}/${action}/`, {
+      method: 'POST',
+    }),
+  withdraw: (id: number) =>
+    api<{ id: number; status: string }>(`/introductions/${id}/withdraw/`, {
+      method: 'POST',
+    }),
+  revealContact: (id: number) =>
+    api<{ revealed: boolean; phone: string; email: string | null }>(
+      `/introductions/${id}/reveal-contact/`,
+      { method: 'POST' },
+    ),
+  events: (id: number) => api<IntroductionEvent[]>(`/introductions/${id}/events/`),
+}

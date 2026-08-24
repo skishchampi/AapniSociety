@@ -29,7 +29,7 @@ export function Dashboard() {
       </dl>
       <nav>
         <a href="/profile">Profile</a> · <a href="/membership">Membership</a> ·{' '}
-        <a href="/needs">Needs</a>
+        <a href="/needs">Needs</a> · <a href="/introductions">Introductions</a>
         {['moderator', 'operator', 'admin'].includes(user.primary_role) && (
           <>
             {' '}

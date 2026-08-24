@@ -1,8 +1,7 @@
 # Current
 
-- Aakash: review, then push and merge the next PR (alpha.3 backend slice).
-- Alpha.3 remaining: frontend pages for filing, routing, accept/decline, and
-  the events trail.
+- Aakash: review, then push and merge the alpha.3 frontend PR.
+- After merge: /pm recompute, then the alpha.3 gate call.
 - Keep worker-led cooperative governance as the product center.
 
 # Future
