@@ -1,6 +1,7 @@
+from django.db.models import Q
 from django.utils import timezone
 from rest_framework import generics, status
-from rest_framework.exceptions import ValidationError
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.response import Response
@@ -8,13 +9,18 @@ from rest_framework.views import APIView
 
 from .models import (
     HouseholdProfile,
+    IntroductionRequest,
     MembershipRequest,
     ServiceCategory,
     ServiceNeed,
     WorkerProfile,
 )
+from .notifications import notify_introduction_event
 from .serializers import (
     HouseholdProfileSerializer,
+    IntroductionCreateSerializer,
+    IntroductionEventSerializer,
+    IntroductionSerializer,
     MembershipRequestSerializer,
     MembershipReviewSerializer,
     ServiceCategorySerializer,
@@ -24,6 +30,7 @@ from .serializers import (
 
 MODERATOR_ROLES = {"moderator", "operator", "admin"}
 HOUSEHOLD_ROLE = "household"
+WORKER_ROLE = "worker"
 
 
 class IsModerator(BasePermission):
@@ -193,3 +200,177 @@ class ServiceNeedDetailView(generics.RetrieveUpdateAPIView):
         if user.primary_role in MODERATOR_ROLES:
             return ServiceNeed.objects.all()
         return ServiceNeed.objects.filter(household__user=user)
+
+
+def _viewer_context(view) -> dict:
+    user = view.request.user
+    return {"viewer_role": getattr(user, "primary_role", ""), "viewer_user": user}
+
+
+class IntroductionCreateView(generics.CreateAPIView):
+    """A household files an introduction request for one worker."""
+
+    serializer_class = IntroductionCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        return [IsAuthenticated(), IsHousehold()]
+
+    def perform_create(self, serializer):
+        household, _ = HouseholdProfile.objects.get_or_create(user=self.request.user)
+        introduction = serializer.save(
+            household=household, status=IntroductionRequest.Status.REQUESTED
+        )
+        introduction.record_event(self.request.user, IntroductionRequest.Status.REQUESTED)
+        notify_introduction_event(introduction, "requested")
+
+
+class MyIntroductionsView(generics.ListAPIView):
+    """Role-scoped list: households see their own, workers theirs, mods all."""
+
+    serializer_class = IntroductionSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        user = self.request.user
+        qs = IntroductionRequest.objects.select_related(
+            "household", "worker", "worker__user"
+        )
+        if user.primary_role in MODERATOR_ROLES:
+            return qs
+        if user.primary_role == WORKER_ROLE:
+            return qs.filter(worker__user=user)
+        return qs.filter(household__user=user)
+
+    def get_serializer_context(self):
+        return {**super().get_serializer_context(), **_viewer_context(self)}
+
+
+def _get_introduction_for(view, pk: int) -> IntroductionRequest:
+    """404 unless the caller is a participant or a moderator."""
+    user = view.request.user
+    qs = IntroductionRequest.objects.select_related("household", "worker")
+    if user.primary_role not in MODERATOR_ROLES:
+        qs = qs.filter(Q(household__user=user) | Q(worker__user=user))
+    return get_object_or_404(qs, pk=pk)
+
+
+class IntroductionRouteView(APIView):
+    """Moderator moves a requested introduction to routed."""
+
+    permission_classes = [IsAuthenticated, IsModerator]
+
+    def post(self, request, pk):
+        introduction = get_object_or_404(IntroductionRequest, pk=pk)
+        if introduction.status != IntroductionRequest.Status.REQUESTED:
+            return Response(
+                {"detail": "Only requested introductions can be routed."},
+                status=status.HTTP_409_CONFLICT,
+            )
+        introduction.status = IntroductionRequest.Status.ROUTED
+        introduction.routed_by = request.user
+        introduction.routed_at = timezone.now()
+        introduction.save(update_fields=["status", "routed_by", "routed_at", "updated_at"])
+        introduction.record_event(request.user, IntroductionRequest.Status.ROUTED)
+        notify_introduction_event(introduction, "routed")
+        return Response({"id": introduction.id, "status": introduction.status})
+
+
+class IntroductionDecideView(APIView):
+    """The routed worker accepts or declines."""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk, action: str):
+        introduction = get_object_or_404(
+            IntroductionRequest.objects.select_related("worker"), pk=pk
+        )
+        if introduction.worker.user_id != request.user.id:
+            raise PermissionDenied("Only the addressed worker can decide.")
+        if introduction.status != IntroductionRequest.Status.ROUTED:
+            return Response(
+                {"detail": "Only routed introductions can be decided."},
+                status=status.HTTP_409_CONFLICT,
+            )
+        new_status = (
+            IntroductionRequest.Status.ACCEPTED
+            if action == "accept"
+            else IntroductionRequest.Status.DECLINED
+        )
+        introduction.status = new_status
+        introduction.decided_at = timezone.now()
+        introduction.save(update_fields=["status", "decided_at", "updated_at"])
+        introduction.record_event(request.user, new_status)
+        notify_introduction_event(introduction, new_status)
+        return Response({"id": introduction.id, "status": introduction.status})
+
+
+class IntroductionWithdrawView(APIView):
+    """The household pulls its request before the worker decides."""
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        introduction = get_object_or_404(IntroductionRequest, pk=pk)
+        if introduction.household.user_id != request.user.id:
+            raise PermissionDenied("Only the requesting household can withdraw.")
+        open_states = {
+            IntroductionRequest.Status.REQUESTED,
+            IntroductionRequest.Status.ROUTED,
+        }
+        if introduction.status not in open_states:
+            return Response(
+                {"detail": "This introduction is already decided."},
+                status=status.HTTP_409_CONFLICT,
+            )
+        introduction.status = IntroductionRequest.Status.WITHDRAWN
+        introduction.decided_at = timezone.now()
+        introduction.save(update_fields=["status", "decided_at", "updated_at"])
+        introduction.record_event(request.user, IntroductionRequest.Status.WITHDRAWN)
+        notify_introduction_event(introduction, "withdrawn")
+        return Response({"id": introduction.id, "status": introduction.status})
+
+
+class RevealContactView(APIView):
+    """Worker-only contact reveal, allowed once the intro is accepted.
+
+    Writes the append-only contact_revealed event and returns the worker's
+    contact fields in this one response. Nothing else ever carries them.
+    """
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        introduction = get_object_or_404(
+            IntroductionRequest.objects.select_related("worker", "worker__user"), pk=pk
+        )
+        if introduction.worker.user_id != request.user.id:
+            raise PermissionDenied("Only the addressed worker can reveal contact.")
+        if introduction.status != IntroductionRequest.Status.ACCEPTED:
+            return Response(
+                {"detail": "Contact reveals only after acceptance."},
+                status=status.HTTP_409_CONFLICT,
+            )
+        introduction.record_event(request.user, "contact_revealed")
+        notify_introduction_event(introduction, "contact_revealed")
+        worker_user = introduction.worker.user
+        return Response(
+            {
+                "revealed": True,
+                "phone": worker_user.phone,
+                "email": worker_user.email,
+            }
+        )
+
+
+class IntroductionEventsView(generics.ListAPIView):
+    """Append-only audit trail. Participants and moderators only."""
+
+    serializer_class = IntroductionEventSerializer
+    permission_classes = [IsAuthenticated]
+    pagination_class = None
+
+    def get_queryset(self):
+        introduction = _get_introduction_for(self, int(self.kwargs["pk"]))
+        return introduction.events.all()

@@ -149,3 +149,85 @@ class ServiceNeed(models.Model):
 
     def __str__(self):
         return f"ServiceNeed<{self.title} ({self.status})>"
+
+
+class IntroductionRequest(models.Model):
+    """A household's ask to meet a worker, routed by a moderator.
+
+    Status flow: requested → routed → accepted | declined | withdrawn.
+    Contact details stay hidden until the worker reveals them after an
+    accept. Every transition writes an append-only IntroductionEvent.
+    """
+
+    class Status(models.TextChoices):
+        REQUESTED = "requested", "Requested"
+        ROUTED = "routed", "Routed"
+        ACCEPTED = "accepted", "Accepted"
+        DECLINED = "declined", "Declined"
+        WITHDRAWN = "withdrawn", "Withdrawn"
+
+    household = models.ForeignKey(
+        HouseholdProfile, on_delete=models.CASCADE, related_name="introductions"
+    )
+    worker = models.ForeignKey(
+        WorkerProfile, on_delete=models.CASCADE, related_name="intro_requests"
+    )
+    category = models.ForeignKey(
+        ServiceCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="intros"
+    )
+    note = models.TextField(blank=True)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.REQUESTED)
+    routed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="intros_routed",
+    )
+    routed_at = models.DateTimeField(null=True, blank=True)
+    decided_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def record_event(self, actor, what: str, detail: str = "") -> "IntroductionEvent":
+        return IntroductionEvent.objects.create(
+            introduction=self, actor=actor, what=what, detail=detail
+        )
+
+    def __str__(self):
+        return f"Introduction<{self.id} {self.status}>"
+
+
+class IntroductionEvent(models.Model):
+    """Append-only audit line for one introduction. Never updated or deleted."""
+
+    class What(models.TextChoices):
+        REQUESTED = "requested", "Requested"
+        ROUTED = "routed", "Routed"
+        ACCEPTED = "accepted", "Accepted"
+        DECLINED = "declined", "Declined"
+        WITHDRAWN = "withdrawn", "Withdrawn"
+        CONTACT_REVEALED = "contact_revealed", "Contact revealed"
+
+    introduction = models.ForeignKey(
+        IntroductionRequest, on_delete=models.CASCADE, related_name="events"
+    )
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="intro_events",
+    )
+    what = models.CharField(max_length=20, choices=What.choices)
+    detail = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_at"]
+
+    def __str__(self):
+        return f"IntroductionEvent<{self.what} on intro {self.introduction_id}>"
