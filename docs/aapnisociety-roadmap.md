@@ -204,6 +204,8 @@ The 0.1.0 release is successful only if workers can use the app to increase cont
 
 Goal: create the modern app skeleton and core identity model.
 
+Status: Met. Recorded 2026-08-24 when Aakash ordered the alpha.2 start.
+
 Deliverables:
 - new frontend PWA scaffold
 - new Django backend scaffold
@@ -225,6 +227,8 @@ Acceptance:
 ### 0.1.0-alpha.2 - Cooperative Membership and Profiles
 
 Goal: make worker and household records usable for a real pilot.
+
+Status: In progress (started 2026-08-24).
 
 Deliverables:
 - worker onboarding flow
