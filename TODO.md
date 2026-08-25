@@ -1,7 +1,8 @@
 # Current
 
-- Aakash: review, then push and merge the alpha.3 frontend PR.
-- After merge: /pm recompute, then the alpha.3 gate call.
+- Aakash: review, then push and merge the PR recording alpha.3 Met plus the
+  alpha.4 plan.
+- After merge: start alpha.4 build per docs/plans/0.1.0-alpha.4-references-bargaining.md.
 - Keep worker-led cooperative governance as the product center.
 
 # Future
@@ -18,13 +19,13 @@
 
 ## 2026-08-24
 
-- Closed every stale status marker on the 0.0.x recovery baseline; one canonical SRS now owns
+- Closed every stale status marker on the 0.0.x recovery baseline. One canonical SRS now owns
   requirements.
-- Recomputed the PM cockpit into local-only notes/STATUS.md; docs/STATUS.md stays a durable
-  public snapshot.
-- Recorded alpha.1 Met; built and merged all of 0.1.0-alpha.2 across PRs #2, #3, #4
-  (membership approval, service needs, profile editors, moderator review).
-- Aakash called the alpha.2 gate Met. Release notes written; alpha.3 plan opened.
+- Recorded alpha.1 Met.
+- Built and merged 0.1.0-alpha.2 across PRs #2–#4. Aakash called it Met. Release notes written.
+- Built and merged 0.1.0-alpha.3 across PRs #6–#7: introductions backend, events, contact
+  reveal, frontend pages. Proven live in the browser. Aakash called it Met.
+- /pm recomputed twice. Cockpit lives at local-only notes/STATUS.md.
 
 ## 2026-06-24
 
