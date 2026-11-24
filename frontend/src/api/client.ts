@@ -177,6 +177,9 @@ export interface ServiceNeed {
   title: string
   details: string
   locality: number | null
+  offered_rate: string | null
+  matched_worker: number | null
+  below_floor?: boolean | null
   status: 'open' | 'matched' | 'closed'
   created_at: string
   updated_at: string
@@ -204,8 +207,12 @@ export const membersApi = {
       body: { action, reason },
     }),
   needs: () => api<ServiceNeed[]>('/needs/'),
-  createNeed: (data: { category: number; title: string; details?: string }) =>
-    api<ServiceNeed>('/needs/', { method: 'POST', body: data }),
+  createNeed: (data: {
+    category: number
+    title: string
+    details?: string
+    offered_rate?: string
+  }) => api<ServiceNeed>('/needs/', { method: 'POST', body: data }),
 }
 
 export interface Locality {
@@ -219,6 +226,12 @@ export const geoApi = {
   localities: () => api<Locality[]>('/localities/', { auth: false }),
 }
 
+export interface SharedReference {
+  id: number
+  body: string
+  created_at: string
+}
+
 export interface Introduction {
   id: number
   status: 'requested' | 'routed' | 'accepted' | 'declined' | 'withdrawn'
@@ -227,6 +240,9 @@ export interface Introduction {
   household: number
   worker_name: string
   household_name: string
+  offered_rate?: string | null
+  below_floor?: boolean | null
+  shared_references?: SharedReference[]
   note: string
   created_at: string
 }
@@ -239,7 +255,7 @@ export interface IntroductionEvent {
 }
 
 export const introductionsApi = {
-  create: (data: { worker: number; note?: string }) =>
+  create: (data: { worker: number; note?: string; offered_rate?: string }) =>
     api<Introduction>('/introductions/', { method: 'POST', body: data }),
   mine: () => api<Introduction[]>('/introductions/mine/'),
   route: (id: number) =>
@@ -261,4 +277,159 @@ export const introductionsApi = {
       { method: 'POST' },
     ),
   events: (id: number) => api<IntroductionEvent[]>(`/introductions/${id}/events/`),
+}
+
+export type ReferenceVisibility = 'private' | 'coop' | 'shared'
+
+export interface WorkerReference {
+  id: number
+  introduction: number
+  body: string
+  rating: number | null
+  visibility: ReferenceVisibility
+  created_at: string
+  updated_at: string
+}
+
+export interface ReferenceRequest {
+  id: number
+  worker: number
+  household: number
+  introduction: number | null
+  status: 'pending' | 'written' | 'declined' | 'expired'
+  created_at: string
+  updated_at: string
+}
+
+export interface CategoryBargainingRow {
+  category_id: number
+  category_label: string
+  worker_count: number
+  avg_rate_floor: string | null
+  min_rate_floor: string | null
+  max_rate_floor: string | null
+  need_count: number
+  avg_offered_rate: string | null
+  below_floor_count: number
+}
+
+export interface LocalityBargainingRow {
+  locality_id: number
+  locality_name: string
+  worker_count: number
+  need_count: number
+  avg_offered_rate: string | null
+}
+
+export interface BargainingSummary {
+  by_category: CategoryBargainingRow[]
+  by_locality: LocalityBargainingRow[]
+}
+
+export const referencesApi = {
+  mine: () => api<WorkerReference[]>('/me/references/'),
+  create: (data: { introduction: number; body: string }) =>
+    api<WorkerReference>('/references/', { method: 'POST', body: data }),
+  setVisibility: (id: number, visibility: ReferenceVisibility) =>
+    api<WorkerReference>(`/references/${id}/visibility/`, {
+      method: 'PATCH',
+      body: { visibility },
+    }),
+  listRequests: () => api<ReferenceRequest[]>('/reference-requests/'),
+  createRequest: (data: { household: number; introduction?: number }) =>
+    api<ReferenceRequest>('/reference-requests/', { method: 'POST', body: data }),
+  bargainingSummary: () => api<BargainingSummary>('/moderation/bargaining-summary/'),
+}
+
+export interface WorkerBlock {
+  id: number
+  worker: number
+  household: number
+  reason: string
+  created_at: string
+}
+
+export type AbuseCategory =
+  | 'harassment'
+  | 'non_payment'
+  | 'caste_abuse'
+  | 'communal_abuse'
+  | 'coercion'
+  | 'stalking'
+  | 'unsafe_conduct'
+
+export interface AbuseReport {
+  id: number
+  reported_household: number | null
+  introduction: number | null
+  category: AbuseCategory
+  details: string
+  status: 'open' | 'reviewing' | 'resolved' | 'dismissed'
+  resolution_note: string
+  reviewed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export type SafetyNoteType =
+  | 'transit_reliability'
+  | 'night_route_risk'
+  | 'hostile_institution'
+  | 'police_or_official_warning'
+  | 'non_payment_pattern'
+  | 'unsafe_building_or_household'
+
+export type EvidenceLevel = 'firsthand' | 'secondhand'
+
+export interface SafetyNote {
+  id: number
+  locality: number | null
+  building: number | null
+  note_type: SafetyNoteType
+  evidence_level: EvidenceLevel
+  body: string
+  created_at: string
+  updated_at: string
+}
+
+export interface AdminAuditLog {
+  id: number
+  actor: number | null
+  action: string
+  target_type: string
+  target_id: number
+  detail: string
+  created_at: string
+}
+
+export const safetyApi = {
+  blocks: () => api<WorkerBlock[]>('/blocks/'),
+  createBlock: (data: { household: number; reason?: string }) =>
+    api<WorkerBlock>('/blocks/', { method: 'POST', body: data }),
+  deleteBlock: (id: number) => api<void>(`/blocks/${id}/`, { method: 'DELETE' }),
+  reports: () => api<AbuseReport[]>('/reports/'),
+  createReport: (data: {
+    reported_household?: number
+    introduction?: number
+    category: AbuseCategory
+    details: string
+  }) => api<AbuseReport>('/reports/', { method: 'POST', body: data }),
+  resolveReport: (
+    id: number,
+    status: 'reviewing' | 'resolved' | 'dismissed',
+    resolution_note = '',
+  ) =>
+    api<AbuseReport>(`/moderation/reports/${id}/resolve/`, {
+      method: 'POST',
+      body: { status, resolution_note },
+    }),
+  safetyNotes: () => api<SafetyNote[]>('/safety-notes/'),
+  createSafetyNote: (data: {
+    locality?: number
+    building?: number
+    note_type: SafetyNoteType
+    evidence_level: EvidenceLevel
+    body: string
+  }) => api<SafetyNote>('/safety-notes/', { method: 'POST', body: data }),
+  auditLog: () => api<AdminAuditLog[]>('/moderation/audit-log/'),
 }

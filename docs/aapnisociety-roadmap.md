@@ -250,7 +250,9 @@ Acceptance:
 
 Goal: implement consent-gated trusted introductions.
 
-Status: Planning started 2026-08-24. Plan: docs/plans/0.1.0-alpha.3-introductions.md.
+Status: Met. Recorded 2026-08-24 by Aakash's verdict.
+
+Status note: docs/plans/0.1.0-alpha.3-introductions.md.
 
 Deliverables:
 - introduction request model
@@ -270,6 +272,8 @@ Acceptance:
 ### 0.1.0-alpha.4 - References and Bargaining
 
 Goal: make worker reputation portable without creating a public ratings marketplace.
+
+Status: Planning started 2026-08-24. Plan: docs/plans/0.1.0-alpha.4-references-bargaining.md.
 
 Deliverables:
 - private worker reference model

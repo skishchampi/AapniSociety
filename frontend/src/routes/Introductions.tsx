@@ -20,6 +20,7 @@ export function Introductions() {
   const { user } = useAuth()
   const [rows, setRows] = useState<Introduction[] | null>(null)
   const [workerId, setWorkerId] = useState('')
+  const [offeredRate, setOfferedRate] = useState('')
   const [note, setNote] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
@@ -77,8 +78,18 @@ export function Introductions() {
       setError('Enter a worker profile ID.')
       return
     }
-    await run(0, () => introductionsApi.create({ worker: id, note: note || undefined }), 'Request sent to the cooperative.')
+    await run(
+      0,
+      () =>
+        introductionsApi.create({
+          worker: id,
+          note: note || undefined,
+          offered_rate: offeredRate || undefined,
+        }),
+      'Request sent to the cooperative.',
+    )
     setWorkerId('')
+    setOfferedRate('')
     setNote('')
   }
 
@@ -134,6 +145,17 @@ export function Introductions() {
             />
           </label>
           <label>
+            Offered monthly rate (₹, optional)
+            <input
+              type="number"
+              min="0"
+              step="100"
+              value={offeredRate}
+              onChange={(e) => setOfferedRate(e.target.value)}
+              placeholder="6000"
+            />
+          </label>
+          <label>
             Note for the worker
             <textarea
               value={note}
@@ -159,7 +181,25 @@ export function Introductions() {
             <strong>#{row.id}</strong> — {statusLabel(row.status)}
             {' · '}
             {isWorker ? row.household_name || 'household hidden until routing' : row.worker_name || 'worker hidden until routing'}
+            {row.offered_rate ? ` · ₹${row.offered_rate}` : ''}
+            {(isWorker || isModerator) && row.below_floor === true && (
+              <>
+                {' · '}
+                <strong>
+                  {isWorker ? 'Below your rate floor' : 'Below worker rate floor'}
+                </strong>
+              </>
+            )}
             {row.note ? ` · ${row.note}` : ''}
+            {row.shared_references && row.shared_references.length > 0 && (
+              <ul>
+                {row.shared_references.map((ref) => (
+                  <li key={ref.id} className="muted">
+                    Shared reference: {ref.body}
+                  </li>
+                ))}
+              </ul>
+            )}
             <br />
             {isModerator && row.status === 'requested' && (
               <button
