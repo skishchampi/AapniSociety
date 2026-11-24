@@ -140,12 +140,29 @@ class ServiceNeed(models.Model):
     locality = models.ForeignKey(
         Locality, null=True, blank=True, on_delete=models.SET_NULL, related_name="service_needs"
     )
+    offered_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    matched_worker = models.ForeignKey(
+        WorkerProfile,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="matched_needs",
+    )
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.OPEN)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ["-created_at"]
+
+    @property
+    def below_floor(self) -> bool | None:
+        if self.offered_rate is None or self.matched_worker is None:
+            return None
+        floor = self.matched_worker.default_rate_floor
+        if floor is None:
+            return None
+        return self.offered_rate < floor
 
     def __str__(self):
         return f"ServiceNeed<{self.title} ({self.status})>"
@@ -175,6 +192,7 @@ class IntroductionRequest(models.Model):
     category = models.ForeignKey(
         ServiceCategory, null=True, blank=True, on_delete=models.SET_NULL, related_name="intros"
     )
+    offered_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     note = models.TextField(blank=True)
     status = models.CharField(max_length=12, choices=Status.choices, default=Status.REQUESTED)
     routed_by = models.ForeignKey(
@@ -191,6 +209,12 @@ class IntroductionRequest(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+
+    @property
+    def below_floor(self) -> bool | None:
+        if self.offered_rate is None or self.worker.default_rate_floor is None:
+            return None
+        return self.offered_rate < self.worker.default_rate_floor
 
     def record_event(self, actor, what: str, detail: str = "") -> "IntroductionEvent":
         return IntroductionEvent.objects.create(
@@ -231,3 +255,225 @@ class IntroductionEvent(models.Model):
 
     def __str__(self):
         return f"IntroductionEvent<{self.what} on intro {self.introduction_id}>"
+
+
+class WorkerReference(models.Model):
+    """Portable, worker-controlled reference grounded in an accepted introduction.
+
+    Private by default. Never exposed as a public rating or leaderboard.
+    """
+
+    class Visibility(models.TextChoices):
+        PRIVATE = "private", "Private — worker only"
+        COOP = "coop", "Cooperative moderators"
+        SHARED = "shared", "Shared inside routed introductions"
+
+    introduction = models.OneToOneField(
+        IntroductionRequest, on_delete=models.CASCADE, related_name="reference"
+    )
+    written_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="references_written"
+    )
+    worker = models.ForeignKey(
+        WorkerProfile, on_delete=models.CASCADE, related_name="references"
+    )
+    body = models.TextField()
+    rating = models.PositiveSmallIntegerField(null=True, blank=True)
+    visibility = models.CharField(
+        max_length=10, choices=Visibility.choices, default=Visibility.PRIVATE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"WorkerReference<{self.id} worker={self.worker_id} ({self.visibility})>"
+
+
+class ReferenceRequest(models.Model):
+    """A worker's invitation for a household to write a reference."""
+
+    class Status(models.TextChoices):
+        PENDING = "pending", "Pending"
+        WRITTEN = "written", "Written"
+        DECLINED = "declined", "Declined"
+        EXPIRED = "expired", "Expired"
+
+    worker = models.ForeignKey(
+        WorkerProfile, on_delete=models.CASCADE, related_name="reference_requests"
+    )
+    household = models.ForeignKey(
+        HouseholdProfile, on_delete=models.CASCADE, related_name="reference_requests"
+    )
+    introduction = models.ForeignKey(
+        IntroductionRequest,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="reference_requests",
+    )
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"ReferenceRequest<{self.id} worker={self.worker_id} ({self.status})>"
+
+
+class WorkerBlock(models.Model):
+    """A worker's private block against a household.
+
+    Households can never read this table. Blocking stops new introductions
+    and prevents routing open introductions from the blocked household.
+    """
+
+    worker = models.ForeignKey(
+        WorkerProfile, on_delete=models.CASCADE, related_name="blocked_households"
+    )
+    household = models.ForeignKey(
+        HouseholdProfile, on_delete=models.CASCADE, related_name="blocked_by_workers"
+    )
+    reason = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["worker", "household"], name="uniq_worker_household_block"
+            )
+        ]
+
+    def __str__(self):
+        return f"WorkerBlock<worker={self.worker_id} blocked household={self.household_id}>"
+
+
+class AbuseReport(models.Model):
+    """Confidential abuse report filed for cooperative moderation."""
+
+    class Category(models.TextChoices):
+        HARASSMENT = "harassment", "Harassment"
+        NON_PAYMENT = "non_payment", "Non-payment"
+        CASTE_ABUSE = "caste_abuse", "Caste abuse"
+        COMMUNAL_ABUSE = "communal_abuse", "Communal abuse"
+        COERCION = "coercion", "Coercion"
+        STALKING = "stalking", "Stalking"
+        UNSAFE_CONDUCT = "unsafe_conduct", "Unsafe conduct"
+
+    class Status(models.TextChoices):
+        OPEN = "open", "Open"
+        REVIEWING = "reviewing", "Reviewing"
+        RESOLVED = "resolved", "Resolved"
+        DISMISSED = "dismissed", "Dismissed"
+
+    reporter = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="abuse_reports_filed"
+    )
+    reported_household = models.ForeignKey(
+        HouseholdProfile,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="abuse_reports",
+    )
+    introduction = models.ForeignKey(
+        IntroductionRequest,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="abuse_reports",
+    )
+    category = models.CharField(max_length=20, choices=Category.choices)
+    details = models.TextField()
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.OPEN)
+    resolution_note = models.TextField(blank=True)
+    reviewed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="abuse_reports_reviewed",
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"AbuseReport<{self.id} {self.category} ({self.status})>"
+
+
+class SafetyNote(models.Model):
+    """Worker-authored city safety knowledge.
+
+    Raw notes are never exposed to households, landlords, RWAs, or public search.
+    """
+
+    class NoteType(models.TextChoices):
+        TRANSIT_RELIABILITY = "transit_reliability", "Transit reliability"
+        NIGHT_ROUTE_RISK = "night_route_risk", "Night-route risk"
+        HOSTILE_INSTITUTION = "hostile_institution", "Hostile institution"
+        POLICE_OR_OFFICIAL_WARNING = (
+            "police_or_official_warning",
+            "Police-station or official-contact warning",
+        )
+        NON_PAYMENT_PATTERN = "non_payment_pattern", "Non-payment pattern"
+        UNSAFE_BUILDING_OR_HOUSEHOLD = (
+            "unsafe_building_or_household",
+            "Unsafe building or household pattern",
+        )
+
+    class EvidenceLevel(models.TextChoices):
+        FIRSTHAND = "firsthand", "Firsthand experience"
+        SECONDHAND = "secondhand", "Secondhand report"
+
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="safety_notes"
+    )
+    locality = models.ForeignKey(
+        Locality, null=True, blank=True, on_delete=models.SET_NULL, related_name="safety_notes"
+    )
+    building = models.ForeignKey(
+        Building, null=True, blank=True, on_delete=models.SET_NULL, related_name="safety_notes"
+    )
+    note_type = models.CharField(max_length=32, choices=NoteType.choices)
+    evidence_level = models.CharField(max_length=12, choices=EvidenceLevel.choices)
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"SafetyNote<{self.id} {self.note_type} ({self.evidence_level})>"
+
+
+class AdminAuditLog(models.Model):
+    """Append-only record of every cooperative moderator/admin action."""
+
+    actor = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="admin_audit_logs",
+    )
+    action = models.CharField(max_length=40)
+    target_type = models.CharField(max_length=40)
+    target_id = models.PositiveIntegerField()
+    detail = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"AdminAuditLog<{self.action} {self.target_type}#{self.target_id}>"

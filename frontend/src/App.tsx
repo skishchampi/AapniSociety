@@ -10,6 +10,8 @@ import { Moderation } from './routes/Moderation'
 import { Needs } from './routes/Needs'
 import { Onboarding } from './routes/Onboarding'
 import { Profile } from './routes/Profile'
+import { References } from './routes/References'
+import { Safety } from './routes/Safety'
 import { SignIn } from './routes/SignIn'
 
 const queryClient = new QueryClient()
@@ -65,6 +67,22 @@ export default function App() {
               element={
                 <RequireAuth>
                   <Introductions />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/references"
+              element={
+                <RequireAuth>
+                  <References />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/safety"
+              element={
+                <RequireAuth>
+                  <Safety />
                 </RequireAuth>
               }
             />

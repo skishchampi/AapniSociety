@@ -10,6 +10,7 @@ export function Needs() {
   const [categoryId, setCategoryId] = useState<string>('')
   const [title, setTitle] = useState('')
   const [details, setDetails] = useState('')
+  const [offeredRate, setOfferedRate] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [notice, setNotice] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
@@ -53,10 +54,12 @@ export function Needs() {
         category: Number(categoryId),
         title,
         details: details || undefined,
+        offered_rate: offeredRate || undefined,
       })
       setNeeds(await membersApi.needs())
       setTitle('')
       setDetails('')
+      setOfferedRate('')
       setNotice('Need posted. The cooperative will help match it.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Could not post the need.')
@@ -106,6 +109,17 @@ export function Needs() {
               placeholder="Timing, frequency, anything else"
             />
           </label>
+          <label>
+            Offered monthly rate (₹, optional)
+            <input
+              type="number"
+              min="0"
+              step="100"
+              value={offeredRate}
+              onChange={(e) => setOfferedRate(e.target.value)}
+              placeholder="e.g. 5000"
+            />
+          </label>
           <button type="submit" disabled={busy}>
             {busy ? 'Posting…' : 'Post need'}
           </button>
@@ -127,6 +141,13 @@ export function Needs() {
         {(needs ?? []).map((need) => (
           <li key={need.id}>
             [{need.status}] {need.title} — {need.details || 'no details'}
+            {need.offered_rate ? ` · ₹${need.offered_rate}` : ''}
+            {need.below_floor === true && (
+              <>
+                {' · '}
+                <strong>Below worker rate floor</strong>
+              </>
+            )}
           </li>
         ))}
       </ul>

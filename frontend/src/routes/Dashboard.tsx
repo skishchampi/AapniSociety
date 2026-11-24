@@ -29,7 +29,8 @@ export function Dashboard() {
       </dl>
       <nav>
         <a href="/profile">Profile</a> · <a href="/membership">Membership</a> ·{' '}
-        <a href="/needs">Needs</a> · <a href="/introductions">Introductions</a>
+        <a href="/needs">Needs</a> · <a href="/introductions">Introductions</a> ·{' '}
+        <a href="/references">References</a> · <a href="/safety">Safety</a>
         {['moderator', 'operator', 'admin'].includes(user.primary_role) && (
           <>
             {' '}
@@ -38,8 +39,7 @@ export function Dashboard() {
         )}
       </nav>
       <p className="muted">
-        Foundations build (0.1.0-alpha.1). Introductions, references, rate floors, and
-        safety notes arrive in later milestones.
+        Cooperative Trust Pilot (0.1.0-alpha.5). All core pilot flows are active.
       </p>
       <button onClick={handleSignOut}>Sign out</button>
     </main>

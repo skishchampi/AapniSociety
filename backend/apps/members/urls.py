@@ -1,6 +1,10 @@
 from django.urls import path
 
 from .views import (
+    AbuseReportListCreateView,
+    AbuseReportResolveView,
+    AdminAuditLogListView,
+    BargainingSummaryView,
     HouseholdProfileMeView,
     IntroductionCreateView,
     IntroductionDecideView,
@@ -12,11 +16,18 @@ from .views import (
     MembershipReviewView,
     MyIntroductionsView,
     MyMembershipRequestsView,
+    MyReferencesView,
+    ReferenceRequestListCreateView,
+    ReferenceVisibilityView,
     RevealContactView,
+    SafetyNoteListCreateView,
     ServiceCategoryListView,
     ServiceNeedDetailView,
     ServiceNeedListCreateView,
+    WorkerBlockDeleteView,
+    WorkerBlockListCreateView,
     WorkerProfileMeView,
+    WorkerReferenceCreateView,
 )
 
 urlpatterns = [
@@ -26,6 +37,7 @@ urlpatterns = [
         HouseholdProfileMeView.as_view(),
         name="me-household-profile",
     ),
+    path("me/references/", MyReferencesView.as_view(), name="me-references"),
     path("service-categories/", ServiceCategoryListView.as_view(), name="service-categories"),
     path("membership/request/", MembershipRequestCreateView.as_view(), name="membership-request"),
     path(
@@ -83,4 +95,34 @@ urlpatterns = [
         IntroductionRouteView.as_view(),
         name="introduction-route",
     ),
+    path(
+        "reference-requests/",
+        ReferenceRequestListCreateView.as_view(),
+        name="reference-requests",
+    ),
+    path(
+        "references/",
+        WorkerReferenceCreateView.as_view(),
+        name="references-create",
+    ),
+    path(
+        "references/<int:pk>/visibility/",
+        ReferenceVisibilityView.as_view(),
+        name="reference-visibility",
+    ),
+    path(
+        "moderation/bargaining-summary/",
+        BargainingSummaryView.as_view(),
+        name="bargaining-summary",
+    ),
+    path("blocks/", WorkerBlockListCreateView.as_view(), name="worker-blocks"),
+    path("blocks/<int:pk>/", WorkerBlockDeleteView.as_view(), name="worker-block-delete"),
+    path("reports/", AbuseReportListCreateView.as_view(), name="abuse-reports"),
+    path(
+        "moderation/reports/<int:pk>/resolve/",
+        AbuseReportResolveView.as_view(),
+        name="abuse-report-resolve",
+    ),
+    path("safety-notes/", SafetyNoteListCreateView.as_view(), name="safety-notes"),
+    path("moderation/audit-log/", AdminAuditLogListView.as_view(), name="admin-audit-log"),
 ]
